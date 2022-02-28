@@ -2,11 +2,19 @@
 
 
 #include "WindMap.h"
-
+#include "Kismet/KismetRenderingLibrary.h"
+#include "WindMapManager.h"
 
 UWindMap::UWindMap()
 {
-	
+	//UWindMapManager::AddWindMapToManager(this);
+}
+
+void UWindMap::BeginDestroy()
+{
+	UObject::BeginDestroy();
+
+	UWindMapManager::RemoveWindMapFromManager(this);
 }
 
 
@@ -28,6 +36,7 @@ bool UWindMap::InitializeWithRenderTargetOption(const int32 renderTargetWidth, c
 		check(IsValid(renderTarget2D));
 		if (IsValid(renderTarget2D))
 		{
+			//renderTarget2D->mipmap
 			renderTarget2D->InitCustomFormat(renderTargetWidth, renderTargetHeight, GetPixelFormatFromRenderTargetFormat(renderTargetForamt), false);
 			WindMapRenderTarget2D = renderTarget2D;
 			isSuccess = true;
@@ -54,7 +63,15 @@ const UTextureRenderTarget2D* UWindMap::GetWindMapRenderTarget2D() const
 
 void UWindMap::SetStaticWindVector(const FVector4& staticWindVector)
 {
-	WindMapRenderTarget2D->ClearColor = FLinearColor{ staticWindVector };
+	if (IsWindMapRenderTarget2DCreated())
+	{
+		WindMapRenderTarget2D->ClearColor = FLinearColor{ staticWindVector };
+	}
+}
+
+void UWindMap::SetStaticWindVectorForTesting()
+{
+	SetStaticWindVector(FVector4(1.0f, 0.0f, 1.0f, 1.0f));
 }
 
 FVector4 UWindMap::GetStaticWindVector() const
@@ -71,4 +88,12 @@ FVector4 UWindMap::GetStaticWindVector() const
 	}
 
 	return staticWindVector;
+}
+
+void UWindMap::ClearWindMapRenderTarget2D()
+{
+	if(IsWindMapRenderTarget2DCreated())
+	{
+		UKismetRenderingLibrary::ClearRenderTarget2D(GetWorld(), WindMapRenderTarget2D, WindMapRenderTarget2D->ClearColor);
+	}
 }

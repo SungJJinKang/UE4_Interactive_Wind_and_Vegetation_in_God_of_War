@@ -13,7 +13,7 @@ class UTextureRenderTarget2D;
 /**
  * 
  */
-UCLASS(BlueprintType)
+UCLASS(Blueprintable)
 class WIND_VEGETATION_GOW4_API UWindMap : public UObject
 {
 	GENERATED_BODY()
@@ -30,6 +30,7 @@ public:
 	FVector WindMapOriginWorldPosition;
 
 	UWindMap();
+	virtual void BeginDestroy() override;
 	
 	UFUNCTION(BlueprintCallable)
 	bool InitializeWithRenderTargetOption(const int32 renderTargetWidth, const int32 renderTargetHeight, const ETextureRenderTargetFormat renderTargetForamt);
@@ -40,7 +41,13 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetStaticWindVector(const FVector4& staticWindVector);
+	
+	UFUNCTION(CallInEditor)
+	void SetStaticWindVectorForTesting();
 
 	UFUNCTION(BluePrintPure, BlueprintCallable)
 	FVector4 GetStaticWindVector() const;
+
+	UFUNCTION(BlueprintCallable)
+	void ClearWindMapRenderTarget2D();
 };

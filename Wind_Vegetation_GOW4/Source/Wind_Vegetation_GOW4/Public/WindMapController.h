@@ -17,19 +17,18 @@ class WIND_VEGETATION_GOW4_API UWindMapController : public USceneComponent
 private:
 
 	void UpdateWindMapOriginWorldPosition();
-	UWindMap* CreateWindMap();
-	UWindMap* CreateWindMap(const int32 renderTargetWidth, const int32 renderTargetHeight, const ETextureRenderTargetFormat renderTargetForamt);
-		
+	UWindMap* CreateWindMapWithDefaultOption() const;
+
 protected:
 
 	UPROPERTY(EditDefaultsOnly)
-	int32 TargetWindMapWidth;
+	int32 DefualtTargetWindMapWidth;
 
 	UPROPERTY(EditDefaultsOnly)
-	int32 TargetWindMapHeight;
+	int32 DefualtTargetWindMapHeight;
 
 	UPROPERTY(EditDefaultsOnly)
-	TEnumAsByte<ETextureRenderTargetFormat> TargetWindMapTextureRenderTargetFormat;
+	TEnumAsByte<ETextureRenderTargetFormat> DefualtTargetWindMapTextureRenderTargetFormat;
 
 	UPROPERTY(EditDefaultsOnly)
 	bool bCreateWindMapWhenBeginPlay;
@@ -45,9 +44,7 @@ public:
 	UWindMapController();
 	virtual void BeginPlay() override;
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
-	UWindMap* GetOwnedWindMap();
-
+	
 	UFUNCTION(BlueprintCallable)
 	void AddNewWindMap();
 
@@ -62,4 +59,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void ClearWindMap();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void ClearColorOwnedWindMap();
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 };

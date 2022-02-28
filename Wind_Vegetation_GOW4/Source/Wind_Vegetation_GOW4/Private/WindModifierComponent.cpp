@@ -4,6 +4,8 @@
 #include "WindModifierComponent.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Materials/Material.h"
+#include "WindMap.h"
+#include "WindMapManager.h"
 
 // Sets default values for this component's properties
 UWindModifierComponent::UWindModifierComponent()
@@ -42,3 +44,31 @@ FVector UWindModifierComponent::GetWindVector_Implementation()
 	return GetComponentVelocity();
 }
 
+void UWindModifierComponent::AddTargetWindMapTo(UWindMap* const windMap)
+{
+	if(IsValid(windMap))
+	{
+		TargetWindMaps.AddUnique(windMap);
+	}
+}
+
+void UWindModifierComponent::RemoveTargetWindMap(const int32 index)
+{
+	if(index < TargetWindMaps.Num())
+	{
+		TargetWindMaps.RemoveAt(index);
+	}
+}
+
+void UWindModifierComponent::ClearWindMap()
+{
+	TargetWindMaps.Reset();
+}
+
+void UWindModifierComponent::SetAllCreatedWindMapToTargetWindMaps()
+{
+	for(UWindMap* windMap : UWindMapManager::GetCreatedWindMaps())
+	{
+		AddTargetWindMapTo(windMap);
+	}
+}

@@ -4,6 +4,7 @@
 #include "WindMapController.h"
 #include "WindMap.h"
 #include "UObject/UObjectGlobals.h"
+#include "WindMapManager.h"
 
 // Sets default values for this component's properties
 UWindMapController::UWindMapController()
@@ -12,21 +13,21 @@ UWindMapController::UWindMapController()
 
 	bCreateWindMapWhenBeginPlay = true;
 
-	TargetWindMapWidth = 256;
-	TargetWindMapHeight = 512;
-	TargetWindMapTextureRenderTargetFormat = ETextureRenderTargetFormat::RTF_RGBA16f;
+	DefualtTargetWindMapWidth = 256;
+	DefualtTargetWindMapHeight = 512;
+	DefualtTargetWindMapTextureRenderTargetFormat = ETextureRenderTargetFormat::RTF_RGBA16f;
 	WindMapWorldOffset = FVector(0.0f);
 }
 
 
 void UWindMapController::AddNewWindMap()
 {
-	OwnedWindMap.Add(CreateWindMap());
+	OwnedWindMap.Add(CreateWindMapWithDefaultOption());
 }
 
 void UWindMapController::AddNewWindMapWithRenderTargetOption(const int32 renderTargetWidth, const int32 renderTargetHeight, const ETextureRenderTargetFormat renderTargetForamt)
 {
-	OwnedWindMap.Add(CreateWindMap(renderTargetWidth, renderTargetHeight, renderTargetForamt));
+	OwnedWindMap.Add(UWindMapManager::CreateWindMap(GetWorld(), renderTargetWidth, renderTargetHeight, renderTargetForamt));
 }
 
 void UWindMapController::AddWindMapTo(UWindMap* const windMap)
@@ -52,6 +53,14 @@ void UWindMapController::ClearWindMap()
 	{
 		windMap->MarkPendingKill();
 	}
+	OwnedWindMap.Reset();
+}
+
+void UWindMapController::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	ClearWindMap();
 }
 
 // Called when the game starts
@@ -79,26 +88,9 @@ void UWindMapController::UpdateWindMapOriginWorldPosition()
 	}
 }
 
-UWindMap* UWindMapController::CreateWindMap()
+UWindMap* UWindMapController::CreateWindMapWithDefaultOption() const
 {
-	return CreateWindMap(TargetWindMapWidth, TargetWindMapHeight, TargetWindMapTextureRenderTargetFormat);
-}
-
-UWindMap* UWindMapController::CreateWindMap(const int32 renderTargetWidth, const int32 renderTargetHeight, const ETextureRenderTargetFormat renderTargetForamt)
-{
-	UWindMap* createdWindMap = NewObject<UWindMap>();
-	check(IsValid(createdWindMap));
-	if (IsValid(createdWindMap))
-	{
-		if(createdWindMap->InitializeWithRenderTargetOption(renderTargetWidth, renderTargetHeight, renderTargetForamt) == false)
-		{
-			ensure(false);
-			createdWindMap->MarkPendingKill();
-			createdWindMap = nullptr;
-		}
-	}
-
-	return createdWindMap;
+	return UWindMapManager::CreateWindMap(GetWorld(), DefualtTargetWindMapWidth, DefualtTargetWindMapHeight, DefualtTargetWindMapTextureRenderTargetFormat);
 }
 
 

@@ -18,7 +18,7 @@ class WIND_VEGETATION_GOW4_API UWindSystem : public UObject
 
 public:
 
-	UWindMap* WindMap;
+	//UWindMap* WindMap;
 
 };
 
