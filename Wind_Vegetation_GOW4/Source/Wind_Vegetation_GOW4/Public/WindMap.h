@@ -29,6 +29,9 @@ public:
 	UPROPERTY(Category = "WindMap", EditAnywhere, BlueprintReadWrite)
 	FVector WindMapOriginWorldPosition;
 
+	UPROPERTY(Category = "WindMap", EditAnywhere, BlueprintReadWrite)
+	FVector WindMapOffset;
+
 	UWindMap();
 	virtual void BeginDestroy() override;
 	

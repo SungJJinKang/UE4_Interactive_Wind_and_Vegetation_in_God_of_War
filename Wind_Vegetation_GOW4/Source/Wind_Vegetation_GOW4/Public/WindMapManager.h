@@ -19,6 +19,7 @@ class WIND_VEGETATION_GOW4_API UWindMapManager : public UBlueprintFunctionLibrar
 private:
 	
 	static TArray<UWindMap*> CreatedWindMaps;
+	static FVector2D WindMapUnitSize;
 
 public:
 
@@ -33,4 +34,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	static UWindMap* CreateWindMap(UObject* Outer, const int32 renderTargetWidth, const int32 renderTargetHeight, const ETextureRenderTargetFormat renderTargetForamt);
+
+	UFUNCTION(BlueprintCallable)
+	static FVector2D GetWindMapUnitSize();
 };

@@ -5,6 +5,7 @@
 #include "WindMap.h"
 
 TArray<UWindMap*> UWindMapManager::CreatedWindMaps{};
+FVector2D UWindMapManager::WindMapUnitSize{100.0f, 100.0f};
 
 void UWindMapManager::AddWindMapToManager(UWindMap* const windMap)
 {
@@ -40,4 +41,9 @@ UWindMap* UWindMapManager::CreateWindMap(UObject* Outer, const int32 renderTarge
 	}
 
 	return createdWindMap;
+}
+
+FVector2D UWindMapManager::GetWindMapUnitSize()
+{
+	return WindMapUnitSize;
 }
