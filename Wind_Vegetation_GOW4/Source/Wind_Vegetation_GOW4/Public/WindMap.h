@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "Engine/TextureRenderTarget2D.h"
+
 #include "WindMap.generated.h"
 
 class UTextureRenderTarget2D;
@@ -19,13 +21,26 @@ class WIND_VEGETATION_GOW4_API UWindMap : public UObject
 protected:
 
 	UPROPERTY(Category = "WindMap", EditAnywhere, BlueprintReadWrite)
-	UTextureRenderTarget2D* WindMap;
+	UTextureRenderTarget2D* WindMapRenderTarget2D;
+
+	UPROPERTY(Category = "WindMap", BlueprintReadOnly)
+	FVector WindMapOriginWorldPosition;
 
 public:
 
-	UFUNCTION(Category = "WindMap", BlueprintCallable)
-	void SlowUpdateWindMap(const FVector& localLocation, const FVector& windVector);
+	UWindMap();
 
+	UFUNCTION(BlueprintCallable)
+	void Initialize();
+	UFUNCTION(BlueprintCallable)
+	void InitializeWithRenderTargetOption(const int32 renderTargetWidth, const int32 renderTargetHeight, const ETextureRenderTargetFormat renderTargetForamt);
+	
 	UPROPERTY(Category = "WindMap", EditAnywhere, BlueprintReadWrite)
 	FVector StaticWindVector;
+
+	void UpdateWindMapOriginWorldPosition(const FVector& originWorldPos);
+
+	bool IsWindMapRenderTarget2DCreated() const;
+	UTextureRenderTarget2D* GetWindMapRenderTarget2D();
+	const UTextureRenderTarget2D* GetWindMapRenderTarget2D() const;
 };

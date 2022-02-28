@@ -3,13 +3,51 @@
 
 #include "WindMap.h"
 
-#include "Engine/TextureRenderTarget2D.h"
 
-void UWindMap::SlowUpdateWindMap(const FVector& localLocation, const FVector& windVector)
+UWindMap::UWindMap()
 {
-	check(IsValid(WindMap));
-	if (IsValid(WindMap))
+	
+}
+
+void UWindMap::Initialize()
+{
+}
+
+
+void UWindMap::InitializeWithRenderTargetOption(const int32 renderTargetWidth, const int32 renderTargetHeight, const ETextureRenderTargetFormat renderTargetForamt)
+{
+	ensure(IsValid(WindMapRenderTarget2D) == false);
+
+	if(IsValid(WindMapRenderTarget2D) == false)
 	{
-		//WindMap->UpdateTexture2D()
+		UTextureRenderTarget2D* renderTarget2D = NewObject<UTextureRenderTarget2D>();
+
+		check(IsValid(renderTarget2D));
+		if (IsValid(renderTarget2D))
+		{
+			renderTarget2D->InitCustomFormat(renderTargetWidth, renderTargetHeight, GetPixelFormatFromRenderTargetFormat(renderTargetForamt), false);
+			WindMapRenderTarget2D = renderTarget2D;
+		}
 	}
+}
+
+
+void UWindMap::UpdateWindMapOriginWorldPosition(const FVector& originWorldPos)
+{
+	WindMapOriginWorldPosition = originWorldPos;
+}
+
+bool UWindMap::IsWindMapRenderTarget2DCreated() const
+{
+	return IsValid(WindMapRenderTarget2D);
+}
+
+UTextureRenderTarget2D* UWindMap::GetWindMapRenderTarget2D()
+{
+	return WindMapRenderTarget2D;
+}
+
+const UTextureRenderTarget2D* UWindMap::GetWindMapRenderTarget2D() const
+{
+	return WindMapRenderTarget2D;
 }
