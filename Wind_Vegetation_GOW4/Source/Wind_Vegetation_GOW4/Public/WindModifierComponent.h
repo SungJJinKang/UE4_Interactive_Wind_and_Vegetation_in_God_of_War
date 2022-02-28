@@ -36,7 +36,7 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	bool DrawVelocityToTargetWindMaps();
 
-	UFUNCTION(BlueprintNativeEvent)
-	FVector GetVelocity();
-	virtual FVector GetVelocity_Implementation();
+	UFUNCTION(BlueprintPure, BlueprintNativeEvent, BlueprintCallable)
+	FVector GetWindVector();
+	virtual FVector GetWindVector_Implementation();
 };

@@ -36,7 +36,7 @@ void UWindModifierComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	
 }
 
-FVector UWindModifierComponent::GetVelocity_Implementation()
+FVector UWindModifierComponent::GetWindVector_Implementation()
 {
 	return FVector();
 }
