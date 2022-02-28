@@ -14,7 +14,7 @@ UWindMapController::UWindMapController()
 
 	TargetWindMapWidth = 256;
 	TargetWindMapHeight = 512;
-	TargetWindMapTextureRenderTargetFormat = ETextureRenderTargetFormat::RTF_RGBA32f;
+	TargetWindMapTextureRenderTargetFormat = ETextureRenderTargetFormat::RTF_RGBA16f;
 	WindMapWorldOffset = FVector(0.0f);
 }
 
@@ -74,7 +74,7 @@ void UWindMapController::UpdateWindMapOriginWorldPosition()
 	{
 		if (IsValid(ownedWindMap))
 		{
-			ownedWindMap->UpdateWindMapOriginWorldPosition(GetComponentLocation() + WindMapWorldOffset);
+			ownedWindMap-> WindMapOriginWorldPosition = GetComponentLocation() + WindMapWorldOffset;
 		}
 	}
 }

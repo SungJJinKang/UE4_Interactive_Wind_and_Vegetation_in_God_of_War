@@ -34,7 +34,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	bool bCreateWindMapWhenBeginPlay;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<UWindMap*> OwnedWindMap;
 
 public:

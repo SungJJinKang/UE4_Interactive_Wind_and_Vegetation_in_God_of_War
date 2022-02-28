@@ -37,12 +37,6 @@ bool UWindMap::InitializeWithRenderTargetOption(const int32 renderTargetWidth, c
 	return isSuccess;
 }
 
-
-void UWindMap::UpdateWindMapOriginWorldPosition(const FVector& originWorldPos)
-{
-	WindMapOriginWorldPosition = originWorldPos;
-}
-
 bool UWindMap::IsWindMapRenderTarget2DCreated() const
 {
 	return IsValid(WindMapRenderTarget2D);
