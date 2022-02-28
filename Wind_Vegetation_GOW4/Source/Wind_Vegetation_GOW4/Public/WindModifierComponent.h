@@ -9,7 +9,7 @@
 class UWindMap;
 class UMaterial;
 
-UCLASS( ClassGroup=(WindMap), Blueprintable, meta=(BlueprintSpawnableComponent) )
+UCLASS( ClassGroup=(WindMap), Abstract, Blueprintable, meta=(BlueprintSpawnableComponent) )
 class WIND_VEGETATION_GOW4_API UWindModifierComponent : public USceneComponent
 {
 	GENERATED_BODY()
@@ -23,8 +23,11 @@ protected:
 	UPROPERTY(Category="WindMap", VisibleAnywhere)
 	TArray<TWeakObjectPtr<UWindMap>> TargetWindMaps;
 
-	UPROPERTY(Category = "WindMap", VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = "WindMap", EditAnywhere, BlueprintReadOnly)
 	UMaterial* WindModifierMaterial;
+
+	UPROPERTY(Category = "WindMap", VisibleAnywhere, BlueprintReadWrite)
+	UMaterialInstanceDynamic* WindModifierMaterialInstanceDynamic;
 
 	virtual void BeginPlay() override;
 	
@@ -35,6 +38,11 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	bool DrawVelocityToTargetWindMaps();
+
+
+	UFUNCTION(BlueprintPure, BlueprintNativeEvent, BlueprintCallable)
+	FVector GetModifierOriginLocation();
+	virtual FVector GetModifierOriginLocation_Implementation();
 
 	UFUNCTION(BlueprintPure, BlueprintNativeEvent, BlueprintCallable)
 	FVector GetWindVector();

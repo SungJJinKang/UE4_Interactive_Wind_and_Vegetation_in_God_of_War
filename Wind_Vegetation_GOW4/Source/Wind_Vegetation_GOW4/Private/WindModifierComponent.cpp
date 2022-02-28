@@ -11,13 +11,7 @@
 UWindModifierComponent::UWindModifierComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
-
-	static ConstructorHelpers::FObjectFinder<UMaterial> StaticWindModifierMaterial( TEXT("Material'/Game/WindSystem/Helper/HelperMaterail/WindModifierMaterial.WindModifierMaterial'") );
-	ensure(StaticWindModifierMaterial.Succeeded());
-	if(StaticWindModifierMaterial.Succeeded())
-	{
-		WindModifierMaterial = StaticWindModifierMaterial.Object;
-	}
+	
 }
 
 
@@ -39,10 +33,24 @@ void UWindModifierComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	DrawVelocityToTargetWindMaps();
 }
 
+FVector UWindModifierComponent::GetModifierOriginLocation_Implementation()
+{
+	return GetComponentLocation();
+}
+
+FVector UWindModifierComponent::GetWindVector_Implementation()
+{
+	return FVector{};
+}
+
+
+
+/*
 FVector UWindModifierComponent::GetWindVector_Implementation()
 {
 	return GetComponentVelocity();
 }
+*/
 
 void UWindModifierComponent::AddTargetWindMapTo(UWindMap* const windMap)
 {
