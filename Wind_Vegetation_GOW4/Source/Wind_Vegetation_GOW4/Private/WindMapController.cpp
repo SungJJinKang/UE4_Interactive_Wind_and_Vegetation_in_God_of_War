@@ -12,6 +12,10 @@ UWindMapController::UWindMapController()
 
 	bCreateWindMapWhenBeginPlay = true;
 
+	TargetWindMapWidth = 256;
+	TargetWindMapHeight = 512;
+	TargetWindMapTextureRenderTargetFormat = ETextureRenderTargetFormat::RTF_RGBA32f;
+	WindMapWorldOffset = FVector(0.0f);
 }
 
 
@@ -82,11 +86,16 @@ UWindMap* UWindMapController::CreateWindMap()
 
 UWindMap* UWindMapController::CreateWindMap(const int32 renderTargetWidth, const int32 renderTargetHeight, const ETextureRenderTargetFormat renderTargetForamt)
 {
-	UWindMap* const createdWindMap = NewObject<UWindMap>();
+	UWindMap* createdWindMap = NewObject<UWindMap>();
 	check(IsValid(createdWindMap));
 	if (IsValid(createdWindMap))
 	{
-		createdWindMap->InitializeWithRenderTargetOption(renderTargetWidth, renderTargetHeight, renderTargetForamt);
+		if(createdWindMap->InitializeWithRenderTargetOption(renderTargetWidth, renderTargetHeight, renderTargetForamt) == false)
+		{
+			ensure(false);
+			createdWindMap->MarkPendingKill();
+			createdWindMap = nullptr;
+		}
 	}
 
 	return createdWindMap;

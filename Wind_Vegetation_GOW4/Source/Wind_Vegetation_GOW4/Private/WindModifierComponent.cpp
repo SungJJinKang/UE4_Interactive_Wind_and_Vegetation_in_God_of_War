@@ -33,11 +33,12 @@ void UWindModifierComponent::BeginPlay()
 void UWindModifierComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	
+
+	DrawVelocityToTargetWindMaps();
 }
 
 FVector UWindModifierComponent::GetWindVector_Implementation()
 {
-	return FVector();
+	return GetComponentVelocity();
 }
 
