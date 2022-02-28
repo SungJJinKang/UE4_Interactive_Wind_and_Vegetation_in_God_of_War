@@ -73,6 +73,7 @@ void UWindMapController::UpdateOwnedWindMap()
 		if(IsValid(windMap))
 		{
 			windMap->WindMapTransformMatrix = FTranslationMatrix::Make(GetWindMapOriginWorldPosition()) * FTranslationMatrix::Make(WindMapOffsetInWorldSpace) * FRotationMatrix::Make(GetWindMapRotation()) * FScaleMatrix::Make(WindMapSizeInWorldSpace) * FTranslationMatrix::Make(FVector(-0.5f, -0.5f, -0.5f));
+			//windMap->WindMapTransformMatrix = FTranslationMatrix::Make(GetWindMapOriginWorldPosition()) * FTranslationMatrix::Make(WindMapOffsetInWorldSpace) /* * FRotationMatrix::Make(GetWindMapRotation()) */ * FScaleMatrix::Make(WindMapSizeInWorldSpace) *FTranslationMatrix::Make(FVector(-0.5f, -0.5f, -0.5f));
 		}
 	}
 }
