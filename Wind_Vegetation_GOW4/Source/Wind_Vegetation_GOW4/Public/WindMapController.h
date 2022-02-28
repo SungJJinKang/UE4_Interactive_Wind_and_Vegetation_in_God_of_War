@@ -9,26 +9,25 @@
 
 class UWindMap;
 
-UCLASS( ClassGroup=(WindMap), Blueprintable, meta=(BlueprintSpawnableComponent) )
+UCLASS( ClassGroup=(WindMap), Abstract, Blueprintable, meta=(BlueprintSpawnableComponent) )
 class WIND_VEGETATION_GOW4_API UWindMapController : public USceneComponent
 {
 	GENERATED_BODY()
 
 private:
-
-	void UpdateWindMapOriginWorldPosition();
+	
 	UWindMap* CreateWindMapWithDefaultOption() const;
 
 protected:
 
 	UPROPERTY(EditDefaultsOnly)
-	int32 DefualtTargetWindMapWidth;
+	int32 DefualtWindMapRenderTargetResolutionWidth;
 
 	UPROPERTY(EditDefaultsOnly)
-	int32 DefualtTargetWindMapHeight;
+	int32 DefualtWindMapRenderTargetResolutionHeight;
 
 	UPROPERTY(EditDefaultsOnly)
-	TEnumAsByte<ETextureRenderTargetFormat> DefualtTargetWindMapTextureRenderTargetFormat;
+	TEnumAsByte<ETextureRenderTargetFormat> DefualtWindMapRenderTargetTextureFormat;
 
 	UPROPERTY(EditDefaultsOnly)
 	bool bCreateWindMapWhenBeginPlay;
@@ -38,9 +37,9 @@ protected:
 
 public:
 
-	UPROPERTY(BlueprintReadWrite)
-	FVector WindMapWorldOffset;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bUpdateOwnedWindMap;
+	
 	UWindMapController();
 	virtual void BeginPlay() override;
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -49,7 +48,12 @@ public:
 	void AddNewWindMap();
 
 	UFUNCTION(BlueprintCallable)
-	void AddNewWindMapWithRenderTargetOption(const int32 renderTargetWidth, const int32 renderTargetHeight, const ETextureRenderTargetFormat renderTargetForamt);
+	void AddNewWindMapWithRenderTargetOption
+	(
+		const int32 renderTargetWidth, 
+		const int32 renderTargetHeight, 
+		const ETextureRenderTargetFormat renderTargetForamt
+	);
 
 	UFUNCTION(BlueprintCallable)
 	void AddWindMapTo(UWindMap* const windMap);
@@ -63,4 +67,26 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void ClearColorOwnedWindMap();
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
+
+
+
+
+	UFUNCTION(BlueprintCallable)
+	void UpdateOwnedWindMap();
+
+	UFUNCTION(BlueprintPure, BlueprintNativeEvent, BlueprintCallable)
+	FVector GetWindMapOriginWorldPosition() const;
+	virtual FVector GetWindMapOriginWorldPosition_Implementation() const;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector WindMapSizeInWorldSpace;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector WindMapOffsetInWorldSpace;
+
+	UFUNCTION(BlueprintPure, BlueprintNativeEvent, BlueprintCallable)
+	FRotator GetWindMapRotation() const;
+	virtual FRotator GetWindMapRotation_Implementation() const;
+
 };

@@ -11,12 +11,12 @@ UWindMapController::UWindMapController()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 
+	bUpdateOwnedWindMap = true;
 	bCreateWindMapWhenBeginPlay = true;
 
-	DefualtTargetWindMapWidth = 256;
-	DefualtTargetWindMapHeight = 512;
-	DefualtTargetWindMapTextureRenderTargetFormat = ETextureRenderTargetFormat::RTF_RGBA16f;
-	WindMapWorldOffset = FVector(0.0f);
+	DefualtWindMapRenderTargetResolutionWidth = 32;
+	DefualtWindMapRenderTargetResolutionHeight = 64;
+	DefualtWindMapRenderTargetTextureFormat = ETextureRenderTargetFormat::RTF_RGBA16f;
 }
 
 
@@ -51,7 +51,10 @@ void UWindMapController::ClearWindMap()
 {
 	for(UWindMap* windMap : OwnedWindMap)
 	{
-		windMap->MarkPendingKill();
+		if (IsValid(windMap))
+		{
+			windMap->MarkPendingKill();
+		}
 	}
 	OwnedWindMap.Reset();
 }
@@ -61,6 +64,17 @@ void UWindMapController::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	Super::EndPlay(EndPlayReason);
 
 	ClearWindMap();
+}
+
+void UWindMapController::UpdateOwnedWindMap()
+{
+	for (UWindMap* windMap : OwnedWindMap)
+	{
+		if(IsValid(windMap))
+		{
+			windMap->WindMapTransformMatrix = FTranslationMatrix::Make(GetWindMapOriginWorldPosition()) * FTranslationMatrix::Make(WindMapOffsetInWorldSpace) * FRotationMatrix::Make(GetWindMapRotation()) * FScaleMatrix::Make(WindMapSizeInWorldSpace) * FTranslationMatrix::Make(FVector(-0.5f, -0.5f, -0.5f));
+		}
+	}
 }
 
 // Called when the game starts
@@ -76,21 +90,9 @@ void UWindMapController::BeginPlay()
 	
 }
 
-
-void UWindMapController::UpdateWindMapOriginWorldPosition()
-{
-	for(UWindMap* ownedWindMap : OwnedWindMap)
-	{
-		if (IsValid(ownedWindMap))
-		{
-			ownedWindMap-> WindMapOriginWorldPosition = GetComponentLocation() + WindMapWorldOffset;
-		}
-	}
-}
-
 UWindMap* UWindMapController::CreateWindMapWithDefaultOption() const
 {
-	return UWindMapManager::CreateWindMap(GetWorld(), DefualtTargetWindMapWidth, DefualtTargetWindMapHeight, DefualtTargetWindMapTextureRenderTargetFormat);
+	return UWindMapManager::CreateWindMap(GetWorld(), DefualtWindMapRenderTargetResolutionWidth, DefualtWindMapRenderTargetResolutionHeight, DefualtWindMapRenderTargetTextureFormat);
 }
 
 
@@ -99,6 +101,21 @@ void UWindMapController::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	UpdateWindMapOriginWorldPosition();
+	if(bUpdateOwnedWindMap == true)
+	{
+		UpdateOwnedWindMap();
+	}
+
+	ensure(WindMapSizeInWorldSpace.X > 0.0f && WindMapSizeInWorldSpace.Y > 0.0f && WindMapSizeInWorldSpace.Z > 0.0f);
+	
 }
 
+FVector UWindMapController::GetWindMapOriginWorldPosition_Implementation() const
+{
+	return GetComponentLocation();
+}
+
+FRotator UWindMapController::GetWindMapRotation_Implementation() const
+{
+	return GetComponentRotation();
+}
