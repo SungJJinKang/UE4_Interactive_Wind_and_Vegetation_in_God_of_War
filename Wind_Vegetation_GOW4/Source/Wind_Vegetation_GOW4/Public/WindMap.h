@@ -20,27 +20,28 @@ class WIND_VEGETATION_GOW4_API UWindMap : public UObject
 
 protected:
 
-	UPROPERTY(Category = "WindMap", EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = "WindMap", EditAnywhere, BlueprintReadOnly)
 	UTextureRenderTarget2D* WindMapRenderTarget2D;
 
 	UPROPERTY(Category = "WindMap", BlueprintReadOnly)
 	FVector WindMapOriginWorldPosition;
 
 public:
-
-	UWindMap();
-
-	UFUNCTION(BlueprintCallable)
-	void Initialize();
-	UFUNCTION(BlueprintCallable)
-	void InitializeWithRenderTargetOption(const int32 renderTargetWidth, const int32 renderTargetHeight, const ETextureRenderTargetFormat renderTargetForamt);
 	
-	UPROPERTY(Category = "WindMap", EditAnywhere, BlueprintReadWrite)
-	FVector StaticWindVector;
-
+	UWindMap();
+	
+	UFUNCTION(BlueprintCallable)
+	bool InitializeWithRenderTargetOption(const int32 renderTargetWidth, const int32 renderTargetHeight, const ETextureRenderTargetFormat renderTargetForamt);
+	
 	void UpdateWindMapOriginWorldPosition(const FVector& originWorldPos);
 
 	bool IsWindMapRenderTarget2DCreated() const;
 	UTextureRenderTarget2D* GetWindMapRenderTarget2D();
 	const UTextureRenderTarget2D* GetWindMapRenderTarget2D() const;
+
+	UFUNCTION(BlueprintCallable)
+	void SetStaticWindVector(const FVector4& staticWindVector);
+
+	UFUNCTION(BluePrintPure, BlueprintCallable)
+	FVector4 GetStaticWindVector() const;
 };
