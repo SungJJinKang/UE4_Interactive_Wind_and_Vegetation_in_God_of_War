@@ -3,9 +3,9 @@
 
 #include "WindMapManager.h"
 #include "WindMap.h"
+#include "Engine/BlueprintGeneratedClass.h"
 
 TArray<UWindMap*> UWindMapManager::CreatedWindMaps{};
-FVector2D UWindMapManager::WindMapUnitSize{100.0f, 100.0f};
 
 void UWindMapManager::AddWindMapToManager(UWindMap* const windMap)
 {
@@ -24,26 +24,28 @@ TArray<UWindMap*>& UWindMapManager::GetCreatedWindMaps()
 
 UWindMap* UWindMapManager::CreateWindMap(UObject* Outer, const int32 renderTargetWidth, const int32 renderTargetHeight, const ETextureRenderTargetFormat renderTargetForamt)
 {
-	UWindMap* createdWindMap = NewObject<UWindMap>(Outer);
-	check(IsValid(createdWindMap));
-	if (IsValid(createdWindMap))
+	UWindMap* createdWindMap = nullptr;
+	
+	UBlueprint* windMapBP = Cast<UBlueprint>(StaticLoadObject(UObject::StaticClass(), nullptr, TEXT("Blueprint'/Game/WindSystem/Helper/WindMap_BP.WindMap_BP'")));
+	check(IsValid(windMapBP));
+	if (IsValid(windMapBP))
 	{
-		if (createdWindMap->InitializeWithRenderTargetOption(renderTargetWidth, renderTargetHeight, renderTargetForamt) == false)
+		createdWindMap = NewObject<UWindMap>(windMapBP->GeneratedClass);
+		check(IsValid(createdWindMap));
+		if (IsValid(createdWindMap))
 		{
-			ensure(false);
-			createdWindMap->MarkPendingKill();
-			createdWindMap = nullptr;
-		}
-		else
-		{
-			AddWindMapToManager(createdWindMap);
+			if (createdWindMap->InitializeWithRenderTargetOption(renderTargetWidth, renderTargetHeight, renderTargetForamt) == false)
+			{
+				ensure(false);
+				createdWindMap->MarkPendingKill();
+				createdWindMap = nullptr;
+			}
+			else
+			{
+				AddWindMapToManager(createdWindMap);
+			}
 		}
 	}
 
 	return createdWindMap;
-}
-
-FVector2D UWindMapManager::GetWindMapUnitSize()
-{
-	return WindMapUnitSize;
 }
