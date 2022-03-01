@@ -6,6 +6,7 @@
 #include "WindMapManager.h"
 
 UWindMap::UWindMap()
+	: StaticWindVectorVariance(0.0f), WindMapMaterialInstance(nullptr)
 {
 	//UWindMapManager::AddWindMapToManager(this);
 }
@@ -44,6 +45,16 @@ bool UWindMap::InitializeWithRenderTargetOption(const int32 renderTargetWidth, c
 	}
 
 	return isSuccess;
+}
+
+void UWindMap::InitializeWindMapMaterial(UMaterial* const material)
+{
+	ensure(IsValid(WindMapMaterialInstance) == false && IsValid(material) == true);
+	if(IsValid(WindMapMaterialInstance) == false && IsValid(material) == true)
+	{
+		WindMapMaterialInstance = UMaterialInstanceDynamic::Create(material, this);
+		check(WindMapMaterialInstance);
+	}
 }
 
 bool UWindMap::IsWindMapRenderTarget2DCreated() const
@@ -96,4 +107,23 @@ void UWindMap::ClearWindMapRenderTarget2D()
 	{
 		UKismetRenderingLibrary::ClearRenderTarget2D(GetWorld(), WindMapRenderTarget2D, WindMapRenderTarget2D->ClearColor);
 	}
+}
+
+void UWindMap::DrawWindMapMaterialInstanceToWindMapRenderTarget()
+{
+	if(IsValid(WindMapRenderTarget2D) && IsValid(WindMapMaterialInstance))
+	{
+		UKismetRenderingLibrary::DrawMaterialToRenderTarget(GetWorld(), WindMapRenderTarget2D, WindMapMaterialInstance);
+	}
+}
+
+void UWindMap::PreTickWindMap_Implementation()
+{
+}
+
+void UWindMap::TickWindMap()
+{
+	PreTickWindMap();
+
+	DrawWindMapMaterialInstanceToWindMapRenderTarget();
 }

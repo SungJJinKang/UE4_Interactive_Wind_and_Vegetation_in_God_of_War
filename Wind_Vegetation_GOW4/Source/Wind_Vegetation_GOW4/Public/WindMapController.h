@@ -8,6 +8,7 @@
 #include "WindMapController.generated.h"
 
 class UWindMap;
+class UMaterial;
 
 UCLASS( ClassGroup=(WindMap), Abstract, Blueprintable, meta=(BlueprintSpawnableComponent) )
 class WIND_VEGETATION_GOW4_API UWindMapController : public USceneComponent
@@ -19,6 +20,9 @@ private:
 	UWindMap* CreateWindMapWithDefaultOption() const;
 
 protected:
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UMaterial* WindMapMaterial;
 
 	UPROPERTY(EditDefaultsOnly)
 	int32 DefualtWindMapRenderTargetResolutionWidth;
@@ -35,10 +39,24 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<UWindMap*> OwnedWindMap;
 
+	UFUNCTION()
+	void TickWindMap(UWindMap* const windMap);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void PreTickWindMap(UWindMap* windMap);
+	virtual void PreTickWindMap_Implementation(UWindMap* windMap);
+
+	UFUNCTION()
+	void TickWindMaps();
+
+	UFUNCTION()
+	void UpdateWindMapData(UWindMap* const windMap);
+
+
 public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool bUpdateOwnedWindMap;
+	bool bUpdateOwnedWindMaps;
 	
 	UWindMapController();
 	virtual void BeginPlay() override;
@@ -64,16 +82,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ClearWindMap();
 
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void ClearColorOwnedWindMap();
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
-
-
-
-
-
-	UFUNCTION(BlueprintCallable)
-	void UpdateOwnedWindMap();
 
 	UFUNCTION(BlueprintPure, BlueprintNativeEvent, BlueprintCallable)
 	FVector GetWindMapOriginWorldPosition() const;

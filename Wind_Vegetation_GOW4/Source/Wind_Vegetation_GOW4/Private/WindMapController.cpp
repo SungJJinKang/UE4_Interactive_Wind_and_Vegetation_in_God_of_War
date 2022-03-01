@@ -11,7 +11,7 @@ UWindMapController::UWindMapController()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 
-	bUpdateOwnedWindMap = true;
+	bUpdateOwnedWindMaps = true;
 	bCreateWindMapWhenBeginPlay = true;
 
 	DefualtWindMapRenderTargetResolutionWidth = 32;
@@ -66,18 +66,38 @@ void UWindMapController::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	ClearWindMap();
 }
 
-void UWindMapController::UpdateOwnedWindMap()
+void UWindMapController::TickWindMap(UWindMap* const windMap)
 {
-	for (UWindMap* windMap : OwnedWindMap)
+	PreTickWindMap(windMap);
+
+	windMap->TickWindMap();
+}
+
+void UWindMapController::PreTickWindMap_Implementation(UWindMap* windMap)
+{
+	UpdateWindMapData(windMap);
+}
+
+void UWindMapController::TickWindMaps()
+{
+	for(UWindMap* windMap : OwnedWindMap)
 	{
 		if(IsValid(windMap))
 		{
-			windMap->WindMapScaleInWorldSpace = WindMapSizeInWorldSpace;
-			windMap->WindMapRotationMatrix = FRotationMatrix::Make(GetWindMapRotation());
-			windMap->WindMapOriginWorldPosition = GetWindMapOriginWorldPosition();
-			windMap->WindMapOffsetInWorldSpace = WindMapOffsetInWorldSpace;
+			TickWindMap(windMap);
 		}
 	}
+}
+
+void UWindMapController::UpdateWindMapData(UWindMap* const windMap)
+{
+	//if (IsValid(windMap))
+	//{
+		windMap->WindMapScaleInWorldSpace = WindMapSizeInWorldSpace;
+		windMap->WindMapRotationMatrix = FRotationMatrix::Make(GetWindMapRotation());
+		windMap->WindMapOriginWorldPosition = GetWindMapOriginWorldPosition();
+		windMap->WindMapOffsetInWorldSpace = WindMapOffsetInWorldSpace;
+	//}
 }
 
 // Called when the game starts
@@ -104,9 +124,9 @@ void UWindMapController::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if(bUpdateOwnedWindMap == true)
+	if(bUpdateOwnedWindMaps == true)
 	{
-		UpdateOwnedWindMap();
+		TickWindMaps();
 	}
 
 	ensure(WindMapSizeInWorldSpace.X > 0.0f && WindMapSizeInWorldSpace.Y > 0.0f && WindMapSizeInWorldSpace.Z > 0.0f);

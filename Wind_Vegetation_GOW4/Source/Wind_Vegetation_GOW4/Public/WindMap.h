@@ -9,6 +9,8 @@
 #include "WindMap.generated.h"
 
 class UTextureRenderTarget2D;
+class UMaterial;
+class UMaterialInstanceDynamic;
 
 /**
  * 
@@ -20,9 +22,15 @@ class WIND_VEGETATION_GOW4_API UWindMap : public UObject
 
 protected:
 
-	UPROPERTY(Category = "WindMap", EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = "WindMap", VisibleAnywhere, BlueprintReadOnly)
 	UTextureRenderTarget2D* WindMapRenderTarget2D;
 
+	UPROPERTY(Category = "WindMap", VisibleAnywhere, BlueprintReadOnly)
+	UMaterialInstanceDynamic* WindMapMaterialInstance;
+
+
+	UFUNCTION(BlueprintCallable)
+	void DrawWindMapMaterialInstanceToWindMapRenderTarget();
 
 public:
 
@@ -37,6 +45,10 @@ public:
 
 	UPROPERTY(Category = "WindMap", EditAnywhere, BlueprintReadWrite)
 	FVector WindMapOffsetInWorldSpace;
+
+	// Static Variance Wind Vector : Applied to wind map every frame.
+	UPROPERTY(Category = "WindMap", EditAnywhere, BlueprintReadWrite)
+	FVector StaticWindVectorVariance;
 	
 
 	UWindMap();
@@ -44,7 +56,10 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	bool InitializeWithRenderTargetOption(const int32 renderTargetWidth, const int32 renderTargetHeight, const ETextureRenderTargetFormat renderTargetForamt);
-	
+
+	UFUNCTION(BlueprintCallable)
+	void InitializeWindMapMaterial(UMaterial* const material);
+
 	bool IsWindMapRenderTarget2DCreated() const;
 	UTextureRenderTarget2D* GetWindMapRenderTarget2D();
 	const UTextureRenderTarget2D* GetWindMapRenderTarget2D() const;
@@ -60,4 +75,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void ClearWindMapRenderTarget2D();
+
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void PreTickWindMap();
+	virtual void PreTickWindMap_Implementation();
+
+	UFUNCTION(BlueprintCallable)
+	void TickWindMap();
 };
