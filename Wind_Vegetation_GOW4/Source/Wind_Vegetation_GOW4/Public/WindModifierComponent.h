@@ -8,6 +8,7 @@
 
 class UWindMap;
 class UMaterial;
+class UMaterialInstanceDynamic;
 
 UCLASS( ClassGroup=(WindMap), Abstract, Blueprintable, meta=(BlueprintSpawnableComponent) )
 class WIND_VEGETATION_GOW4_API UWindModifierComponent : public USceneComponent
@@ -43,19 +44,15 @@ public:
 	UFUNCTION(BlueprintPure, BlueprintNativeEvent, BlueprintCallable)
 	FVector GetModifierOriginLocation();
 	virtual FVector GetModifierOriginLocation_Implementation();
-
-	UFUNCTION(BlueprintPure, BlueprintNativeEvent, BlueprintCallable)
-	FVector GetWindVector();
-	virtual FVector GetWindVector_Implementation();
-
+	
 	UFUNCTION(BlueprintPure)
-	int32 GetTargetWindMapCount() const
+	FORCEINLINE int32 GetTargetWindMapCount() const
 	{
 		return TargetWindMaps.Num();
 	}
 
 	UFUNCTION(BlueprintCallable)
-	bool GetTargetWindMap(const int32 targetWindMapIndex, UWindMap*& outWindMap)
+	FORCEINLINE bool GetTargetWindMap(const int32 targetWindMapIndex, UWindMap*& outWindMap)
 	{
 		if(TargetWindMaps.Num() > targetWindMapIndex)
 		{

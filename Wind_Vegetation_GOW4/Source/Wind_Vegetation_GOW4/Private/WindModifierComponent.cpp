@@ -2,10 +2,8 @@
 
 
 #include "WindModifierComponent.h"
-#include "UObject/ConstructorHelpers.h"
-#include "Materials/Material.h"
 #include "WindMap.h"
-#include "WindMapManager.h"
+#include "UObject/UObjectIterator.h"
 
 // Sets default values for this component's properties
 UWindModifierComponent::UWindModifierComponent()
@@ -38,13 +36,6 @@ FVector UWindModifierComponent::GetModifierOriginLocation_Implementation()
 	return GetComponentLocation();
 }
 
-FVector UWindModifierComponent::GetWindVector_Implementation()
-{
-	return FVector{};
-}
-
-
-
 /*
 FVector UWindModifierComponent::GetWindVector_Implementation()
 {
@@ -75,8 +66,8 @@ void UWindModifierComponent::ClearWindMap()
 
 void UWindModifierComponent::SetAllCreatedWindMapToTargetWindMaps()
 {
-	for(UWindMap* windMap : UWindMapManager::GetCreatedWindMaps())
+	for (TObjectIterator<UWindMap> Itr; Itr; ++Itr)
 	{
-		AddTargetWindMapTo(windMap);
+		AddTargetWindMapTo(*Itr);
 	}
 }

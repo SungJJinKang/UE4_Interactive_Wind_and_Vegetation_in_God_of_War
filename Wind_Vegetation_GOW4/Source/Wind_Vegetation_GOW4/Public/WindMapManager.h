@@ -16,20 +16,7 @@ class WIND_VEGETATION_GOW4_API UWindMapManager : public UBlueprintFunctionLibrar
 {
 	GENERATED_BODY()
 
-private:
-	
-	static TArray<UWindMap*> CreatedWindMaps;
-
 public:
-
-	UFUNCTION(BlueprintCallable)
-	static void AddWindMapToManager(UWindMap* const windMap);
-
-	UFUNCTION(BlueprintCallable)
-	static void RemoveWindMapFromManager(UWindMap* const windMap);
-
-	UFUNCTION(BlueprintCallable)
-	static TArray<UWindMap*>& GetCreatedWindMaps();
 
 	UFUNCTION(BlueprintCallable)
 	static UWindMap* CreateWindMap
