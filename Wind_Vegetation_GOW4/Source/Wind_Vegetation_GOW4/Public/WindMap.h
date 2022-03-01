@@ -25,7 +25,7 @@ protected:
 	UPROPERTY(Category = "WindMap", VisibleAnywhere, BlueprintReadOnly)
 	UTextureRenderTarget2D* WindMapRenderTarget2D;
 
-	UPROPERTY(Category = "WindMap", VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = "WindMap", EditAnywhere, BlueprintReadOnly)
 	UMaterialInstanceDynamic* WindMapMaterialInstance;
 
 
@@ -79,7 +79,7 @@ public:
 	void ClearWindMapRenderTarget2D();
 
 
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintNativeEvent)
 	void PreTickWindMap();
 	virtual void PreTickWindMap_Implementation();
 
