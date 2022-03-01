@@ -22,8 +22,11 @@ class WIND_VEGETATION_GOW4_API UWindMap : public UObject
 
 protected:
 
+	UPROPERTY()
+	uint32 DefaultRenderTargetCount;
+
 	UPROPERTY(Category = "WindMap", VisibleAnywhere, BlueprintReadOnly)
-	UTextureRenderTarget2D* WindMapRenderTarget2D;
+	TArray<UTextureRenderTarget2D*> WindMapRenderTarget2Ds;
 
 	UPROPERTY(Category = "WindMap", EditAnywhere, BlueprintReadOnly)
 	UMaterialInstanceDynamic* WindMapMaterialInstance;
@@ -31,6 +34,7 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 	void DrawWindMapMaterialInstanceToWindMapRenderTarget();
+
 
 public:
 
@@ -45,11 +49,12 @@ public:
 
 	UPROPERTY(Category = "WindMap", EditAnywhere, BlueprintReadWrite)
 	FVector WindMapOffsetInWorldSpace;
-
-	// Static Variance Wind Vector : Applied to wind map every frame.
-	UPROPERTY(Category = "WindMap", EditAnywhere, BlueprintReadWrite)
-	FVector StaticWindVectorVariance;
 	
+	UPROPERTY(Category = "WindMap", EditAnywhere, BlueprintReadWrite)
+	FVector StaticWindVector;
+
+	UPROPERTY(Category = "WindMap", EditAnywhere, BlueprintReadWrite)
+	FVector SpeedToStaticWindVector;
 
 	UWindMap();
 	virtual void BeginDestroy() override;
@@ -63,22 +68,13 @@ public:
 	void InitializeWindMapMaterial(UMaterial* const material);
 
 	bool IsWindMapRenderTarget2DCreated() const;
-	UTextureRenderTarget2D* GetWindMapRenderTarget2D();
-	const UTextureRenderTarget2D* GetWindMapRenderTarget2D() const;
-
-	UFUNCTION(BlueprintCallable)
-	void SetStaticWindVector(const FVector4& staticWindVector);
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	UTextureRenderTarget2D* GetBackBufferWindMapRenderTarget2D();
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	UTextureRenderTarget2D* GetFrontBufferWindMapRenderTarget2D();
+	UTextureRenderTarget2D* GetWindMapRenderTarget2D(const int32 index);
+	const UTextureRenderTarget2D* GetWindMapRenderTarget2D(const int32 index) const;
 	
-	UFUNCTION(CallInEditor)
-	void SetStaticWindVectorForTesting();
-
-	UFUNCTION(BluePrintPure, BlueprintCallable)
-	FVector4 GetStaticWindVector() const;
-
-	UFUNCTION(BlueprintCallable)
-	void ClearWindMapRenderTarget2D();
-
-
 	UFUNCTION(BlueprintNativeEvent)
 	void PreTickWindMap();
 	virtual void PreTickWindMap_Implementation();

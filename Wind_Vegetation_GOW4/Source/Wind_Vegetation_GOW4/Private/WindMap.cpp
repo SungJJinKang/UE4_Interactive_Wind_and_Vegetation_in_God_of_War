@@ -6,7 +6,7 @@
 #include "WindMapManager.h"
 
 UWindMap::UWindMap()
-	: StaticWindVectorVariance(0.0f), WindMapMaterialInstance(nullptr)
+	: StaticWindVector(0.0f), DefaultRenderTargetCount(2), WindMapMaterialInstance(nullptr)
 {
 	//UWindMapManager::AddWindMapToManager(this);
 	
@@ -21,35 +21,42 @@ void UWindMap::BeginDestroy()
 		WindMapMaterialInstance->MarkPendingKill();
 	}
 
-	if (IsValid(WindMapRenderTarget2D))
+	for(UTextureRenderTarget2D* renderTarget : WindMapRenderTarget2Ds)
 	{
-		WindMapRenderTarget2D->MarkPendingKill();
+		if (IsValid(renderTarget))
+		{
+			renderTarget->MarkPendingKill();
+		}
 	}
+	
 }
 
 
 bool UWindMap::InitializeWithRenderTargetOption(const int32 renderTargetWidth, const int32 renderTargetHeight, const ETextureRenderTargetFormat renderTargetForamt)
 {
 	bool isSuccess = false;
-
-	ensure(IsValid(WindMapRenderTarget2D) == false);
+	
+	ensure(WindMapRenderTarget2Ds.Num() == 0);
 	check(renderTargetWidth > 0 && renderTargetHeight > 0 && (renderTargetWidth & (renderTargetWidth - 1)) == 0 && (renderTargetHeight & (renderTargetHeight - 1)) == 0);
 
 	if
 	(
-		IsValid(WindMapRenderTarget2D) == false &&
+		WindMapRenderTarget2Ds.Num() == 0 &&
 		renderTargetWidth > 0 && renderTargetHeight > 0 && (renderTargetWidth & (renderTargetWidth - 1)) == 0 && (renderTargetHeight & (renderTargetHeight - 1)) == 0
 	)
 	{
-		UTextureRenderTarget2D* renderTarget2D = NewObject<UTextureRenderTarget2D>();
-
-		check(IsValid(renderTarget2D));
-		if (IsValid(renderTarget2D))
+		for(uint32 i = 0 ; i < DefaultRenderTargetCount ; i++)
 		{
-			//renderTarget2D->mipmap
-			renderTarget2D->InitCustomFormat(renderTargetWidth, renderTargetHeight, GetPixelFormatFromRenderTargetFormat(renderTargetForamt), false);
-			WindMapRenderTarget2D = renderTarget2D;
-			isSuccess = true;
+			UTextureRenderTarget2D* renderTarget2D = NewObject<UTextureRenderTarget2D>();
+
+			check(IsValid(renderTarget2D));
+			if (IsValid(renderTarget2D))
+			{
+				//renderTarget2D->mipmap
+				renderTarget2D->InitCustomFormat(renderTargetWidth, renderTargetHeight, GetPixelFormatFromRenderTargetFormat(renderTargetForamt), false);
+				WindMapRenderTarget2Ds.Add(renderTarget2D);
+				isSuccess = true;
+			}
 		}
 	}
 
@@ -82,61 +89,57 @@ void UWindMap::InitializeWindMapMaterial(UMaterial* const material)
 
 bool UWindMap::IsWindMapRenderTarget2DCreated() const
 {
-	return IsValid(WindMapRenderTarget2D);
+	return (WindMapRenderTarget2Ds.Num() > 0);
 }
 
-UTextureRenderTarget2D* UWindMap::GetWindMapRenderTarget2D()
+UTextureRenderTarget2D* UWindMap::GetBackBufferWindMapRenderTarget2D()
 {
-	return WindMapRenderTarget2D;
+	const uint32 backBufferIndex = GFrameCounter % 2;
+	return GetWindMapRenderTarget2D(backBufferIndex);
 }
 
-const UTextureRenderTarget2D* UWindMap::GetWindMapRenderTarget2D() const
+UTextureRenderTarget2D* UWindMap::GetFrontBufferWindMapRenderTarget2D()
 {
-	return WindMapRenderTarget2D;
+	const uint32 frontBufferIndex = (GFrameCounter + 1) % 2;
+	return GetWindMapRenderTarget2D(frontBufferIndex);
 }
 
-void UWindMap::SetStaticWindVector(const FVector4& staticWindVector)
+UTextureRenderTarget2D* UWindMap::GetWindMapRenderTarget2D(const int32 index)
 {
-	if (IsWindMapRenderTarget2DCreated())
+	UTextureRenderTarget2D* renderTarget = nullptr;
+
+	if(index < WindMapRenderTarget2Ds.Num())
 	{
-		WindMapRenderTarget2D->ClearColor = FLinearColor{ staticWindVector };
-	}
-}
-
-void UWindMap::SetStaticWindVectorForTesting()
-{
-	SetStaticWindVector(FVector4(1.0f, 0.0f, 1.0f, 1.0f));
-}
-
-FVector4 UWindMap::GetStaticWindVector() const
-{
-	FVector4 staticWindVector;
-
-	if(IsWindMapRenderTarget2DCreated())
-	{
-		staticWindVector = WindMapRenderTarget2D->ClearColor;
-	}
-	else
-	{
-		staticWindVector = FVector4{ 0.0f };
+		if(IsValid(WindMapRenderTarget2Ds[index]))
+		{
+			renderTarget = WindMapRenderTarget2Ds[index];
+		}
 	}
 
-	return staticWindVector;
+	return renderTarget;
 }
 
-void UWindMap::ClearWindMapRenderTarget2D()
+const UTextureRenderTarget2D* UWindMap::GetWindMapRenderTarget2D(const int32 index) const
 {
-	if(IsWindMapRenderTarget2DCreated())
+	UTextureRenderTarget2D* renderTarget = nullptr;
+
+	if (index < WindMapRenderTarget2Ds.Num())
 	{
-		UKismetRenderingLibrary::ClearRenderTarget2D(GetWorld(), WindMapRenderTarget2D, WindMapRenderTarget2D->ClearColor);
+		if (IsValid(WindMapRenderTarget2Ds[index]))
+		{
+			renderTarget = WindMapRenderTarget2Ds[index];
+		}
 	}
+
+	return renderTarget;
 }
 
 void UWindMap::DrawWindMapMaterialInstanceToWindMapRenderTarget()
 {
-	if(IsValid(WindMapRenderTarget2D) && IsValid(WindMapMaterialInstance))
+	if(IsWindMapRenderTarget2DCreated() && IsValid(WindMapMaterialInstance))
 	{
-		UKismetRenderingLibrary::DrawMaterialToRenderTarget(GetWorld(), WindMapRenderTarget2D, WindMapMaterialInstance);
+		
+		UKismetRenderingLibrary::DrawMaterialToRenderTarget(GetWorld(), GetFrontBufferWindMapRenderTarget2D(), WindMapMaterialInstance);
 	}
 }
 
