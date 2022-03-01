@@ -30,15 +30,19 @@ protected:
 	UPROPERTY(Category = "WindMap", VisibleAnywhere, BlueprintReadWrite)
 	UMaterialInstanceDynamic* WindModifierMaterialInstanceDynamic;
 
+
 	virtual void BeginPlay() override;
 	
 public:	
 
+	UPROPERTY(Category = "WindMap", EditAnywhere, BlueprintReadWrite)
+	bool bTickDrawWindVectorToTargetWindMaps;
+
 	UWindModifierComponent();
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	bool DrawVelocityToTargetWindMaps();
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, CallInEditor)
+	void DrawWindVectorToTargetWindMaps();
 
 
 	UFUNCTION(BlueprintPure, BlueprintNativeEvent, BlueprintCallable)

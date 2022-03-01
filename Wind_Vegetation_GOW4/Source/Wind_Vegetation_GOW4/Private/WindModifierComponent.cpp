@@ -7,9 +7,9 @@
 
 // Sets default values for this component's properties
 UWindModifierComponent::UWindModifierComponent()
+	: bTickDrawWindVectorToTargetWindMaps(false)
 {
 	PrimaryComponentTick.bCanEverTick = true;
-	
 }
 
 
@@ -28,7 +28,11 @@ void UWindModifierComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	DrawVelocityToTargetWindMaps();
+	if(bTickDrawWindVectorToTargetWindMaps)
+	{
+		DrawWindVectorToTargetWindMaps();
+	}
+	
 }
 
 FVector UWindModifierComponent::GetModifierOriginLocation_Implementation()
