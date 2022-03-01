@@ -18,7 +18,7 @@ void UWindModifierComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
+	SetAllCreatedWindMapToTargetWindMaps();
 	
 }
 
