@@ -32,5 +32,12 @@ public:
 	static TArray<UWindMap*>& GetCreatedWindMaps();
 
 	UFUNCTION(BlueprintCallable)
-	static UWindMap* CreateWindMap(UObject* Outer, const int32 renderTargetWidth, const int32 renderTargetHeight, const ETextureRenderTargetFormat renderTargetForamt);
+	static UWindMap* CreateWindMap
+	(
+		UObject* Outer,
+		const int32 renderTargetWidth, 
+		const int32 renderTargetHeight,
+		const ETextureRenderTargetFormat renderTargetForamt,
+		UMaterial* const windMapMaterial = nullptr
+	);
 };

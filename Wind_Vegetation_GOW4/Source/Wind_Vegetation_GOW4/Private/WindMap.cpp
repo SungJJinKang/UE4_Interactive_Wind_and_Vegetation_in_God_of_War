@@ -9,6 +9,7 @@ UWindMap::UWindMap()
 	: StaticWindVectorVariance(0.0f), WindMapMaterialInstance(nullptr)
 {
 	//UWindMapManager::AddWindMapToManager(this);
+	
 }
 
 void UWindMap::BeginDestroy()
@@ -16,6 +17,16 @@ void UWindMap::BeginDestroy()
 	UObject::BeginDestroy();
 
 	UWindMapManager::RemoveWindMapFromManager(this);
+
+	if(IsValid(WindMapMaterialInstance))
+	{
+		WindMapMaterialInstance->MarkPendingKill();
+	}
+
+	if (IsValid(WindMapRenderTarget2D))
+	{
+		WindMapRenderTarget2D->MarkPendingKill();
+	}
 }
 
 
@@ -47,13 +58,27 @@ bool UWindMap::InitializeWithRenderTargetOption(const int32 renderTargetWidth, c
 	return isSuccess;
 }
 
+void UWindMap::InitializeWindMapMaterialWithDefaultMaterial()
+{
+	ensure(IsValid(WindMapMaterialInstance) == false);
+	if (IsValid(WindMapMaterialInstance) == false)
+	{
+		UMaterial* const windMapMaterial = LoadObject<UMaterial>(this, TEXT("Material'/Game/WindSystem/Helper/HelperMaterail/WindMapMaterial.WindMapMaterial'"));
+		check(IsValid(windMapMaterial));
+		if (IsValid(windMapMaterial))
+		{
+			InitializeWindMapMaterial(windMapMaterial);
+		}
+	}
+}
+
 void UWindMap::InitializeWindMapMaterial(UMaterial* const material)
 {
 	ensure(IsValid(WindMapMaterialInstance) == false && IsValid(material) == true);
-	if(IsValid(WindMapMaterialInstance) == false && IsValid(material) == true)
+	if (IsValid(WindMapMaterialInstance) == false && IsValid(material) == true)
 	{
 		WindMapMaterialInstance = UMaterialInstanceDynamic::Create(material, this);
-		check(WindMapMaterialInstance);
+		check(IsValid(WindMapMaterialInstance));
 	}
 }
 

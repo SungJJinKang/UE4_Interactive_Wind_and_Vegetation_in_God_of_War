@@ -58,6 +58,8 @@ public:
 	bool InitializeWithRenderTargetOption(const int32 renderTargetWidth, const int32 renderTargetHeight, const ETextureRenderTargetFormat renderTargetForamt);
 
 	UFUNCTION(BlueprintCallable)
+	void InitializeWindMapMaterialWithDefaultMaterial();
+	UFUNCTION(BlueprintCallable)
 	void InitializeWindMapMaterial(UMaterial* const material);
 
 	bool IsWindMapRenderTarget2DCreated() const;

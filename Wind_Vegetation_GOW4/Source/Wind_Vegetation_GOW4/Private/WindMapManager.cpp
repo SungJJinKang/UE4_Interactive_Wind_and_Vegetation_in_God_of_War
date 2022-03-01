@@ -22,15 +22,22 @@ TArray<UWindMap*>& UWindMapManager::GetCreatedWindMaps()
 	return CreatedWindMaps;
 }
 
-UWindMap* UWindMapManager::CreateWindMap(UObject* Outer, const int32 renderTargetWidth, const int32 renderTargetHeight, const ETextureRenderTargetFormat renderTargetForamt)
+UWindMap* UWindMapManager::CreateWindMap
+(
+	UObject* Outer, 
+	const int32 renderTargetWidth, 
+	const int32 renderTargetHeight, 
+	const ETextureRenderTargetFormat renderTargetForamt,
+	UMaterial* const windMapMaterial
+)
 {
 	UWindMap* createdWindMap = nullptr;
 	
-	UBlueprint* windMapBP = Cast<UBlueprint>(StaticLoadObject(UObject::StaticClass(), nullptr, TEXT("Blueprint'/Game/WindSystem/Helper/WindMap_BP.WindMap_BP'")));
-	check(IsValid(windMapBP));
-	if (IsValid(windMapBP))
+	UClass* windMapBPClass = Cast<UClass>(StaticLoadObject(UClass::StaticClass(), nullptr, TEXT("Blueprint'/Game/WindSystem/Helper/WindMap_BP.WindMap_BP_C'")));
+	check(IsValid(windMapBPClass));
+	if (IsValid(windMapBPClass))
 	{
-		createdWindMap = NewObject<UWindMap>(windMapBP->GeneratedClass);
+		createdWindMap = NewObject<UWindMap>(Outer, windMapBPClass);
 		check(IsValid(createdWindMap));
 		if (IsValid(createdWindMap))
 		{
@@ -42,6 +49,15 @@ UWindMap* UWindMapManager::CreateWindMap(UObject* Outer, const int32 renderTarge
 			}
 			else
 			{
+				if(IsValid(windMapMaterial) == true)
+				{
+					createdWindMap->InitializeWindMapMaterial(windMapMaterial);
+				}
+				else
+				{
+					createdWindMap->InitializeWindMapMaterialWithDefaultMaterial();
+				}
+
 				AddWindMapToManager(createdWindMap);
 			}
 		}
