@@ -3,24 +3,6 @@
 
 #include "WindMapManager.h"
 #include "WindMap.h"
-#include "Engine/BlueprintGeneratedClass.h"
-
-TArray<UWindMap*> UWindMapManager::CreatedWindMaps{};
-
-void UWindMapManager::AddWindMapToManager(UWindMap* const windMap)
-{
-	CreatedWindMaps.Add(windMap);
-}
-
-void UWindMapManager::RemoveWindMapFromManager(UWindMap* const windMap)
-{
-	CreatedWindMaps.Remove(windMap);
-}
-
-TArray<UWindMap*>& UWindMapManager::GetCreatedWindMaps()
-{
-	return CreatedWindMaps;
-}
 
 UWindMap* UWindMapManager::CreateWindMap
 (
@@ -57,8 +39,6 @@ UWindMap* UWindMapManager::CreateWindMap
 				{
 					createdWindMap->InitializeWindMapMaterialWithDefaultMaterial();
 				}
-
-				AddWindMapToManager(createdWindMap);
 			}
 		}
 	}

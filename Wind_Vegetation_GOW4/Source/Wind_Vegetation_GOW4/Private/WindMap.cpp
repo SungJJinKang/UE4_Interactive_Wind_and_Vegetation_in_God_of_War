@@ -15,9 +15,7 @@ UWindMap::UWindMap()
 void UWindMap::BeginDestroy()
 {
 	UObject::BeginDestroy();
-
-	UWindMapManager::RemoveWindMapFromManager(this);
-
+	
 	if(IsValid(WindMapMaterialInstance))
 	{
 		WindMapMaterialInstance->MarkPendingKill();
@@ -63,7 +61,7 @@ void UWindMap::InitializeWindMapMaterialWithDefaultMaterial()
 	ensure(IsValid(WindMapMaterialInstance) == false);
 	if (IsValid(WindMapMaterialInstance) == false)
 	{
-		UMaterial* const windMapMaterial = LoadObject<UMaterial>(this, TEXT("Material'/Game/WindSystem/Helper/HelperMaterail/WindMapMaterial.WindMapMaterial'"));
+		UMaterial* const windMapMaterial = LoadObject<UMaterial>(this, TEXT("Material'/Game/WindSystem/Helper/HelperMaterail/WindMapPostProcessMaterial.WindMapPostProcessMaterial'"));
 		check(IsValid(windMapMaterial));
 		if (IsValid(windMapMaterial))
 		{
