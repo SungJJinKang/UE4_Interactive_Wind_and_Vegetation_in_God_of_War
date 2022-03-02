@@ -17,11 +17,11 @@ UWindMapDebuggerComponent::UWindMapDebuggerComponent()
 	// ...
 }
 
-void UWindMapDebuggerComponent::DrawArrowsOfDebugTargetWindMaps()
+void UWindMapDebuggerComponent::DrawDebugTargetWindMaps()
 {
 	for(UWindMap* windMap : DebugTargetWindMaps)
 	{
-		DrawArrowsOfDebugTargetWindMap(windMap);
+		DrawDebugTargetWindMap(windMap);
 	}
 }
 
@@ -58,9 +58,9 @@ void UWindMapDebuggerComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if(bTickDrawArrowsOfDebugTargetWindMaps == true)
+	if(bTickDrawArrowsOfDebugTargetWindMaps || bTickDrawWindVectorTextOfDebugTargetWindMaps)
 	{
-		DrawArrowsOfDebugTargetWindMaps();
+		DrawDebugTargetWindMaps();
 	}
 }
 

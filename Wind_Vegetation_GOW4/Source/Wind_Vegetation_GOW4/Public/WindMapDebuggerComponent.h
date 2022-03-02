@@ -35,8 +35,8 @@ public:
 	UWindMapDebuggerComponent();
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void DrawArrowsOfDebugTargetWindMap(const UWindMap* const windMap) const;
+	void DrawDebugTargetWindMap(const UWindMap* const windMap) const;
 	UFUNCTION(BlueprintCallable)
-	void DrawArrowsOfDebugTargetWindMaps();
+	void DrawDebugTargetWindMaps();
 		
 };
