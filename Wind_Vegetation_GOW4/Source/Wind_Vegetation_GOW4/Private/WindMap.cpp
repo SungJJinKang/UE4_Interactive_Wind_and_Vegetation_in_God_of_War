@@ -5,8 +5,23 @@
 #include "Kismet/KismetRenderingLibrary.h"
 #include "WindMapManager.h"
 
+void UWindMap::ApplyPostProcessToBackBuffer()
+{
+	UTextureRenderTarget2D* const backRenderTarget = GetBackBufferWindMapRenderTarget2D();
+
+	if(IsValid(backRenderTarget) && IsValid(WindMapPostProcessMaterialInstance))
+	{
+		UKismetRenderingLibrary::DrawMaterialToRenderTarget(GetWorld(), backRenderTarget, WindMapPostProcessMaterialInstance);
+	}
+}
+
+UWorld* UWindMap::GetWorldOfWindMap() const
+{
+	return GetWorld();
+}
+
 UWindMap::UWindMap()
-	: StaticWindVector(0.0f), DefaultRenderTargetCount(2), WindMapMaterialInstance(nullptr)
+	: StaticWindVector(0.0f), DefaultRenderTargetCount(3)
 {
 	//UWindMapManager::AddWindMapToManager(this);
 	
@@ -16,11 +31,6 @@ void UWindMap::BeginDestroy()
 {
 	UObject::BeginDestroy();
 	
-	if(IsValid(WindMapMaterialInstance))
-	{
-		WindMapMaterialInstance->MarkPendingKill();
-	}
-
 	for(UTextureRenderTarget2D* renderTarget : WindMapRenderTarget2Ds)
 	{
 		if (IsValid(renderTarget))
@@ -31,6 +41,10 @@ void UWindMap::BeginDestroy()
 	
 }
 
+
+void UWindMap::InitializeWindMap_Implementation()
+{
+}
 
 bool UWindMap::InitializeWithRenderTargetOption(const int32 renderTargetWidth, const int32 renderTargetHeight, const ETextureRenderTargetFormat renderTargetForamt)
 {
@@ -63,44 +77,26 @@ bool UWindMap::InitializeWithRenderTargetOption(const int32 renderTargetWidth, c
 	return isSuccess;
 }
 
-void UWindMap::InitializeWindMapMaterialWithDefaultMaterial()
-{
-	ensure(IsValid(WindMapMaterialInstance) == false);
-	if (IsValid(WindMapMaterialInstance) == false)
-	{
-		UMaterial* const windMapMaterial = LoadObject<UMaterial>(this, TEXT("Material'/Game/WindSystem/Helper/HelperMaterail/WindMapPostProcessMaterial.WindMapPostProcessMaterial'"));
-		check(IsValid(windMapMaterial));
-		if (IsValid(windMapMaterial))
-		{
-			InitializeWindMapMaterial(windMapMaterial);
-		}
-	}
-}
-
-void UWindMap::InitializeWindMapMaterial(UMaterial* const material)
-{
-	ensure(IsValid(WindMapMaterialInstance) == false && IsValid(material) == true);
-	if (IsValid(WindMapMaterialInstance) == false && IsValid(material) == true)
-	{
-		WindMapMaterialInstance = UMaterialInstanceDynamic::Create(material, this);
-		check(IsValid(WindMapMaterialInstance));
-	}
-}
-
 bool UWindMap::IsWindMapRenderTarget2DCreated() const
 {
 	return (WindMapRenderTarget2Ds.Num() > 0);
 }
 
+UTextureRenderTarget2D* UWindMap::GetVarianceBufferWindMapRenderTarget2D()
+{
+	const uint32 varianceBufferIndex = GFrameCounter % 3;
+	return GetWindMapRenderTarget2D(varianceBufferIndex);
+}
+
 UTextureRenderTarget2D* UWindMap::GetBackBufferWindMapRenderTarget2D()
 {
-	const uint32 backBufferIndex = GFrameCounter % 2;
+	const uint32 backBufferIndex = (GFrameCounter + 1) % 3;
 	return GetWindMapRenderTarget2D(backBufferIndex);
 }
 
 UTextureRenderTarget2D* UWindMap::GetFrontBufferWindMapRenderTarget2D()
 {
-	const uint32 frontBufferIndex = (GFrameCounter + 1) % 2;
+	const uint32 frontBufferIndex = (GFrameCounter + 2) % 3;
 	return GetWindMapRenderTarget2D(frontBufferIndex);
 }
 
@@ -134,14 +130,15 @@ const UTextureRenderTarget2D* UWindMap::GetWindMapRenderTarget2D(const int32 ind
 	return renderTarget;
 }
 
-void UWindMap::DrawWindMapMaterialInstanceToWindMapRenderTarget()
+/*
+void UWindMap::ApplyPostProcessToBackBuffer()
 {
 	if(IsWindMapRenderTarget2DCreated() && IsValid(WindMapMaterialInstance))
 	{
-		
-		UKismetRenderingLibrary::DrawMaterialToRenderTarget(GetWorld(), GetFrontBufferWindMapRenderTarget2D(), WindMapMaterialInstance);
+		UKismetRenderingLibrary::DrawMaterialToRenderTarget(GetWorld(), GetBackBufferWindMapRenderTarget2D(), WindMapMaterialInstance);
 	}
 }
+*/
 
 void UWindMap::PreTickWindMap_Implementation()
 {
@@ -151,5 +148,12 @@ void UWindMap::TickWindMap()
 {
 	PreTickWindMap();
 
-	DrawWindMapMaterialInstanceToWindMapRenderTarget();
+	ApplyPostProcessToBackBuffer();
+
+	PostTickWindMap();
+}
+
+void UWindMap::PostTickWindMap_Implementation()
+{
+	//UKismetRenderingLibrary::ClearRenderTarget2D(GetWorld(), GetVarianceBufferWindMapRenderTarget2D(), FLinearColor::Transparent);
 }

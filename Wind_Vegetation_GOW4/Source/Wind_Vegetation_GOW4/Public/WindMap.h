@@ -10,6 +10,7 @@
 
 class UTextureRenderTarget2D;
 class UMaterial;
+class UMaterialInterface;
 class UMaterialInstanceDynamic;
 
 /**
@@ -27,14 +28,15 @@ protected:
 
 	UPROPERTY(Category = "WindMap", VisibleAnywhere, BlueprintReadOnly)
 	TArray<UTextureRenderTarget2D*> WindMapRenderTarget2Ds;
+	
+	UPROPERTY(Category = "WindMap", EditAnywhere, BlueprintReadWrite)
+	UMaterialInstanceDynamic* WindMapPostProcessMaterialInstance;
 
-	UPROPERTY(Category = "WindMap", EditAnywhere, BlueprintReadOnly)
-	UMaterialInstanceDynamic* WindMapMaterialInstance;
+	UFUNCTION()
+	void ApplyPostProcessToBackBuffer();
 
-
-	UFUNCTION(BlueprintCallable)
-	void DrawWindMapMaterialInstanceToWindMapRenderTarget();
-
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	UWorld* GetWorldOfWindMap() const;
 
 public:
 
@@ -58,16 +60,18 @@ public:
 
 	UWindMap();
 	virtual void BeginDestroy() override;
+
+	UFUNCTION(BlueprintNativeEvent)
+	void InitializeWindMap();
+	virtual void InitializeWindMap_Implementation();
 	
 	UFUNCTION(BlueprintCallable)
 	bool InitializeWithRenderTargetOption(const int32 renderTargetWidth, const int32 renderTargetHeight, const ETextureRenderTargetFormat renderTargetForamt);
-
-	UFUNCTION(BlueprintCallable)
-	void InitializeWindMapMaterialWithDefaultMaterial();
-	UFUNCTION(BlueprintCallable)
-	void InitializeWindMapMaterial(UMaterial* const material);
-
+	
+	UFUNCTION(BlueprintPure, BlueprintCallable)
 	bool IsWindMapRenderTarget2DCreated() const;
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	UTextureRenderTarget2D* GetVarianceBufferWindMapRenderTarget2D();
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	UTextureRenderTarget2D* GetBackBufferWindMapRenderTarget2D();
 	UFUNCTION(BlueprintCallable, BlueprintPure)
@@ -81,4 +85,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void TickWindMap();
+
+
+	UFUNCTION(BlueprintNativeEvent)
+	void PostTickWindMap();
+	virtual void PostTickWindMap_Implementation();
 };

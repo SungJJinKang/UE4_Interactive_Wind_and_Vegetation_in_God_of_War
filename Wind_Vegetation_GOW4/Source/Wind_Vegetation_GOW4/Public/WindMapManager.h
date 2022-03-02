@@ -24,7 +24,6 @@ public:
 		UObject* Outer,
 		const int32 renderTargetWidth, 
 		const int32 renderTargetHeight,
-		const ETextureRenderTargetFormat renderTargetForamt,
-		UMaterial* const windMapMaterial = nullptr
+		const ETextureRenderTargetFormat renderTargetForamt
 	);
 };

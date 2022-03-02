@@ -9,8 +9,7 @@ UWindMap* UWindMapManager::CreateWindMap
 	UObject* Outer, 
 	const int32 renderTargetWidth, 
 	const int32 renderTargetHeight, 
-	const ETextureRenderTargetFormat renderTargetForamt,
-	UMaterial* const windMapMaterial
+	const ETextureRenderTargetFormat renderTargetForamt
 )
 {
 	UWindMap* createdWindMap = nullptr;
@@ -31,14 +30,7 @@ UWindMap* UWindMapManager::CreateWindMap
 			}
 			else
 			{
-				if(IsValid(windMapMaterial) == true)
-				{
-					createdWindMap->InitializeWindMapMaterial(windMapMaterial);
-				}
-				else
-				{
-					createdWindMap->InitializeWindMapMaterialWithDefaultMaterial();
-				}
+				createdWindMap->InitializeWindMap();
 			}
 		}
 	}

@@ -56,18 +56,22 @@ public:
 	}
 
 	UFUNCTION(BlueprintCallable)
-	FORCEINLINE bool GetTargetWindMap(const int32 targetWindMapIndex, UWindMap*& outWindMap)
+	FORCEINLINE UWindMap* GetTargetWindMap(const int32 targetWindMapIndex)
 	{
+		UWindMap* targetWindMap;
+
 		if(TargetWindMaps.Num() > targetWindMapIndex)
 		{
-			outWindMap = TargetWindMaps[targetWindMapIndex].Get();
-			return true;
+			targetWindMap = TargetWindMaps[targetWindMapIndex].Get();
 		}
 		else
 		{
-			return false;
+			targetWindMap = nullptr;
 		}
+
+		return targetWindMap;
 	}
+
 
 	UFUNCTION(BlueprintCallable)
 	void AddTargetWindMapTo(UWindMap* const windMap);
