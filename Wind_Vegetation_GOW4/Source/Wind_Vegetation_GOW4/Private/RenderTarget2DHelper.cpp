@@ -5,8 +5,10 @@
 #include "Engine/TextureRenderTarget2D.h"
 #include "Engine/Texture.h"
 
-bool URenderTarget2DHelper::ReadPixelsFromRenderTarget2D(const UTextureRenderTarget2D* const renderTarget2D, TArray<FColor>& pixels, int32& textureWidth, int32& textureHeight)
+bool URenderTarget2DHelper::ReadPixelsFromRenderTarget2D(const UTextureRenderTarget2D* const renderTarget2D, UFloat16ColorArrayWrapper* const float16ColorArrayWrapper, int32& textureWidth, int32& textureHeight)
 {
+	check(IsValid(float16ColorArrayWrapper));
+
 	bool isSuccess = false;
 
 	if(IsValid(renderTarget2D))
@@ -14,8 +16,7 @@ bool URenderTarget2DHelper::ReadPixelsFromRenderTarget2D(const UTextureRenderTar
 		FTextureRenderTarget2DResource* textureResource = static_cast<FTextureRenderTarget2DResource*>(renderTarget2D->Resource);
 		if(textureResource != nullptr)
 		{
-			pixels.Reset();
-			if (textureResource->ReadPixels(pixels))
+			if (textureResource->ReadFloat16Pixels(float16ColorArrayWrapper->Array, ECubeFace::CubeFace_MAX))
 			{
 				textureWidth = textureResource->GetSizeX();
 				textureHeight = textureResource->GetSizeY();
