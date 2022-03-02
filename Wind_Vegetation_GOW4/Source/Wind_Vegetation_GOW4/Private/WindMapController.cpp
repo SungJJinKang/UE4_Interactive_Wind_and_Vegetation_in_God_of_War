@@ -91,13 +91,8 @@ void UWindMapController::TickWindMaps()
 
 void UWindMapController::UpdateWindMapData(UWindMap* const windMap)
 {
-	//if (IsValid(windMap))
-	//{
-		windMap->WindMapScaleInWorldSpace = WindMapSizeInWorldSpace;
-		windMap->WindMapRotationMatrix = FRotationMatrix::Make(GetWindMapRotation());
-		windMap->WindMapOriginWorldPosition = GetWindMapOriginWorldPosition();
-		windMap->WindMapOffsetInWorldSpace = WindMapOffsetInWorldSpace;
-	//}
+	windMap->WindMapRotationMatrix = FRotationMatrix::Make(GetWindMapRotation());
+	windMap->WindMapOriginWorldPosition = GetWindMapOriginWorldPosition();
 }
 
 // Called when the game starts
@@ -129,7 +124,6 @@ void UWindMapController::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 		TickWindMaps();
 	}
 
-	ensure(WindMapSizeInWorldSpace.X > 0.0f && WindMapSizeInWorldSpace.Y > 0.0f && WindMapSizeInWorldSpace.Z > 0.0f);
 	
 }
 
@@ -141,4 +135,25 @@ FVector UWindMapController::GetWindMapOriginWorldPosition_Implementation() const
 FRotator UWindMapController::GetWindMapRotation_Implementation() const
 {
 	return GetComponentRotation();
+}
+
+UWindMap* UWindMapController::GetOwnedWindMap(const int32 index)
+{
+	UWindMap* returnedWindMap;
+
+	if(index < OwnedWindMap.Num())
+	{
+		returnedWindMap = OwnedWindMap[index];
+	}
+	else
+	{
+		returnedWindMap = nullptr;
+	}
+
+	return returnedWindMap;
+}
+
+int32 UWindMapController::GetOwnedWindMapCount() const
+{
+	return OwnedWindMap.Num();
 }

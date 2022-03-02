@@ -87,15 +87,13 @@ public:
 	UFUNCTION(BlueprintPure, BlueprintNativeEvent, BlueprintCallable)
 	FVector GetWindMapOriginWorldPosition() const;
 	virtual FVector GetWindMapOriginWorldPosition_Implementation() const;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FVector WindMapSizeInWorldSpace;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FVector WindMapOffsetInWorldSpace;
-
+	
 	UFUNCTION(BlueprintPure, BlueprintNativeEvent, BlueprintCallable)
 	FRotator GetWindMapRotation() const;
 	virtual FRotator GetWindMapRotation_Implementation() const;
 
+	UFUNCTION(BlueprintCallable)
+	UWindMap* GetOwnedWindMap(const int32 index);
+	UFUNCTION(BlueprintCallable)
+	int32 GetOwnedWindMapCount() const;
 };
