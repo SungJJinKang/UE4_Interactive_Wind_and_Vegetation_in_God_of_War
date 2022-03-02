@@ -133,7 +133,7 @@ FRotator UWindMapController::GetWindMapRotation_Implementation() const
 	return GetComponentRotation();
 }
 
-UWindMap* UWindMapController::GetOwnedWindMap(const int32 index)
+UWindMap* UWindMapController::GetOwnedWindMapByIndex(const int32 index)
 {
 	UWindMap* returnedWindMap;
 

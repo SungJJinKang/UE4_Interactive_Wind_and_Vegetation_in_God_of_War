@@ -89,7 +89,7 @@ public:
 	virtual FRotator GetWindMapRotation_Implementation() const;
 
 	UFUNCTION(BlueprintCallable)
-	UWindMap* GetOwnedWindMap(const int32 index);
+	UWindMap* GetOwnedWindMapByIndex(const int32 index);
 	UFUNCTION(BlueprintCallable)
 	int32 GetOwnedWindMapCount() const;
 };
