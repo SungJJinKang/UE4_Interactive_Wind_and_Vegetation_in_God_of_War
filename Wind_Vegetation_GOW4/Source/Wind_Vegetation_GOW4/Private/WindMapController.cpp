@@ -10,6 +10,7 @@
 UWindMapController::UWindMapController()
 {
 	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.TickGroup = TG_PostUpdateWork;
 
 	bUpdateOwnedWindMaps = true;
 	bCreateWindMapWhenBeginPlay = true;

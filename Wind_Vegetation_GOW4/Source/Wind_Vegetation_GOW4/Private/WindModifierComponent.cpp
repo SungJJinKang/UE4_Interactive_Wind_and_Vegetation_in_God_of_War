@@ -10,6 +10,7 @@ UWindModifierComponent::UWindModifierComponent()
 	: bTickDrawWindVectorToTargetWindMaps(false)
 {
 	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.TickGroup = TG_PostPhysics;
 }
 
 
