@@ -87,7 +87,7 @@ void UWindMapController::TickWindMaps()
 
 void UWindMapController::UpdateWindMapData(UWindMap* const windMap)
 {
-	windMap->WindMapRotationMatrix = FRotationMatrix::Make(GetWindMapRotation());
+	windMap->WindMapRotationMatrix = FRotationMatrix::Make(GetWindMapRotation()).InverseFast(); // I don't know why Inverse is need.
 	windMap->WindMapOriginWorldPosition = GetWindMapOriginWorldPosition();
 }
 
