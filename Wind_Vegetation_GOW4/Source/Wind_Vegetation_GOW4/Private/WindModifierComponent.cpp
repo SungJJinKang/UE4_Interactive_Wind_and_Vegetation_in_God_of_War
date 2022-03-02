@@ -50,13 +50,9 @@ FVector UWindModifierComponent::GetWindVector_Implementation()
 
 void UWindModifierComponent::AddTargetWindMapTo(UWindMap* const windMap)
 {
-	if
-	(
-		IsValid(windMap) && 
-		TargetWindMaps.ContainsByPredicate([windMap](const TWeakObjectPtr<UWindMap>& weakWindMap) { return weakWindMap.Get() == windMap; }) == false
-	)
+	if(IsValid(windMap))
 	{
-		TargetWindMaps.Add(windMap);
+		TargetWindMaps.AddUnique(windMap);
 	}
 }
 
