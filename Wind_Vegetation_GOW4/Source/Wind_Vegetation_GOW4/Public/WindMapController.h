@@ -41,14 +41,10 @@ protected:
 
 	UFUNCTION()
 	void TickWindMap(UWindMap* const windMap);
-
-	UFUNCTION(BlueprintNativeEvent)
-	void PreTickWindMap(UWindMap* windMap);
-	virtual void PreTickWindMap_Implementation(UWindMap* windMap);
-
+	
 	UFUNCTION()
 	void TickWindMaps();
-
+	
 	UFUNCTION()
 	void UpdateWindMapData(UWindMap* const windMap);
 

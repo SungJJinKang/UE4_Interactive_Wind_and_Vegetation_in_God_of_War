@@ -69,14 +69,9 @@ void UWindMapController::EndPlay(const EEndPlayReason::Type EndPlayReason)
 
 void UWindMapController::TickWindMap(UWindMap* const windMap)
 {
-	PreTickWindMap(windMap);
+	UpdateWindMapData(windMap);
 
 	windMap->TickWindMap();
-}
-
-void UWindMapController::PreTickWindMap_Implementation(UWindMap* windMap)
-{
-	UpdateWindMapData(windMap);
 }
 
 void UWindMapController::TickWindMaps()
