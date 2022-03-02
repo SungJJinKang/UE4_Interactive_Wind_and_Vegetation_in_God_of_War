@@ -35,9 +35,6 @@ protected:
 	UFUNCTION()
 	void ApplyPostProcessToBackBuffer();
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-	UWorld* GetWorldOfWindMap() const;
-
 public:
 
 	UPROPERTY(Category = "WindMap", EditAnywhere, BlueprintReadWrite)

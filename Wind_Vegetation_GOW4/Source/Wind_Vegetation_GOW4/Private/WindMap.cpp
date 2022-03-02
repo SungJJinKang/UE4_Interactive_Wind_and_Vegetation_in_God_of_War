@@ -15,11 +15,6 @@ void UWindMap::ApplyPostProcessToBackBuffer()
 	}
 }
 
-UWorld* UWindMap::GetWorldOfWindMap() const
-{
-	return GetWorld();
-}
-
 UWindMap::UWindMap()
 	: StaticWindVector(0.0f), DefaultRenderTargetCount(3)
 {
