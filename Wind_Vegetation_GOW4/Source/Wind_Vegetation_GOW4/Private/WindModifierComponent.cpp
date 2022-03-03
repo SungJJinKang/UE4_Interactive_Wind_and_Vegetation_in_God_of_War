@@ -36,6 +36,26 @@ void UWindModifierComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	
 }
 
+void UWindModifierComponent::DrawWindVectorToTargetWindMaps()
+{
+	for(int32 index = 0 ; index < TargetWindMaps.Num() ; index++)
+	{
+		DrawWindVectorToTargetWindMapByIndex(index);
+	}
+}
+
+void UWindModifierComponent::DrawWindVectorToTargetWindMapByIndex(const int32 index)
+{
+	ensure(index < TargetWindMaps.Num());
+	if(index < TargetWindMaps.Num())
+	{
+		if(UWindMap* const windMap = TargetWindMaps[index].Get())
+		{
+			DrawWindVectorToPassedWindMap(windMap);
+		}
+	}
+}
+
 FVector UWindModifierComponent::GetModifierOriginLocation_Implementation()
 {
 	return GetComponentLocation();

@@ -30,9 +30,8 @@ protected:
 	UPROPERTY(Category = "WindMap", VisibleAnywhere, BlueprintReadWrite)
 	UMaterialInstanceDynamic* WindModifierMaterialInstanceDynamic;
 
-
 	virtual void BeginPlay() override;
-	
+
 public:	
 
 	UPROPERTY(Category = "WindMap", EditAnywhere, BlueprintReadWrite)
@@ -41,21 +40,27 @@ public:
 	UWindModifierComponent();
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, CallInEditor)
+
+	UFUNCTION(Category = "WindMap", BlueprintImplementableEvent, BlueprintCallable, CallInEditor)
+	void DrawWindVectorToPassedWindMap(UWindMap* windMap);
+
+	UFUNCTION(Category = "WindMap", BlueprintCallable, CallInEditor)
 	void DrawWindVectorToTargetWindMaps();
 
+	UFUNCTION(Category = "WindMap", BlueprintCallable)
+	void DrawWindVectorToTargetWindMapByIndex(const int32 index);
 
 	UFUNCTION(BlueprintPure, BlueprintNativeEvent, BlueprintCallable)
 	FVector GetModifierOriginLocation();
 	virtual FVector GetModifierOriginLocation_Implementation();
 	
-	UFUNCTION(BlueprintPure)
+	UFUNCTION(Category = "WindMap", BlueprintPure)
 	FORCEINLINE int32 GetTargetWindMapCount() const
 	{
 		return TargetWindMaps.Num();
 	}
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Category = "WindMap", BlueprintCallable)
 	FORCEINLINE UWindMap* GetTargetWindMap(const int32 targetWindMapIndex)
 	{
 		UWindMap* targetWindMap;
@@ -73,13 +78,13 @@ public:
 	}
 
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Category = "WindMap", BlueprintCallable)
 	void AddTargetWindMapTo(UWindMap* const windMap);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Category = "WindMap", BlueprintCallable)
 	void RemoveTargetWindMap(const int32 index);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Category = "WindMap", BlueprintCallable)
 	void ClearWindMap();
 
 	UFUNCTION(Category = "WindMap", CallInEditor, BlueprintCallable)
