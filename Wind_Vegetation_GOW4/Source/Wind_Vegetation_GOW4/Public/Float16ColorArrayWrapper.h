@@ -52,4 +52,14 @@ public:
 		check(index >= 0 && index < Array.Num());
 		return static_cast<float>(Array[index].A);
 	}
+
+	FORCEINLINE operator TArray<FFloat16Color>&()
+	{
+		return Array;
+	}
+
+	FORCEINLINE operator const TArray<FFloat16Color>& () const
+	{
+		return Array;
+	}
 };
