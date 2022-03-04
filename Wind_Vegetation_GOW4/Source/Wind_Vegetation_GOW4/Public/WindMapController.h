@@ -24,13 +24,13 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	UMaterial* WindMapMaterial;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int32 DefualtWindMapRenderTargetResolutionWidth;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int32 DefualtWindMapRenderTargetResolutionHeight;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int32 DefualtWindMapRenderTargetResolutionDepth;
 
 	UPROPERTY(EditDefaultsOnly)

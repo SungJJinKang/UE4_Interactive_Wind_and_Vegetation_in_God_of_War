@@ -5,6 +5,7 @@
 #include "WindMap.h"
 #include "UObject/UObjectGlobals.h"
 #include "WindMapManager.h"
+#include "Engine/World.h"
 
 // Sets default values for this component's properties
 UWindMapController::UWindMapController()
