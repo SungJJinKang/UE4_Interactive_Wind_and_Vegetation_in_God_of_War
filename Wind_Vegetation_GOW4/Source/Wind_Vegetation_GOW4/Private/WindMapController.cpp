@@ -26,9 +26,15 @@ void UWindMapController::AddNewWindMap()
 	OwnedWindMap.Add(CreateWindMapWithDefaultOption());
 }
 
-void UWindMapController::AddNewWindMapWithRenderTargetOption(const int32 renderTargetWidth, const int32 renderTargetHeight, const ETextureRenderTargetFormat renderTargetForamt)
+void UWindMapController::AddNewWindMapWithRenderTargetOption
+(
+	const int32 renderTargetWidth,
+	const int32 renderTargetHeight, 
+	const int32 renderTargetDepth, 
+	const ETextureRenderTargetFormat renderTargetForamt
+)
 {
-	OwnedWindMap.Add(UWindMapManager::CreateWindMap(GetWorld(), renderTargetWidth, renderTargetHeight, renderTargetForamt));
+	OwnedWindMap.Add(UWindMapManager::CreateWindMap(GetWorld(), renderTargetWidth, renderTargetHeight, renderTargetDepth, renderTargetForamt));
 }
 
 void UWindMapController::AddWindMapTo(UWindMap* const windMap)
@@ -106,7 +112,7 @@ void UWindMapController::BeginPlay()
 
 UWindMap* UWindMapController::CreateWindMapWithDefaultOption() const
 {
-	return UWindMapManager::CreateWindMap(GetWorld(), DefualtWindMapRenderTargetResolutionWidth, DefualtWindMapRenderTargetResolutionHeight, DefualtWindMapRenderTargetTextureFormat);
+	return UWindMapManager::CreateWindMap(GetWorld(), DefualtWindMapRenderTargetResolutionWidth, DefualtWindMapRenderTargetResolutionHeight, DefualtWindMapRenderTargetResolutionDepth, DefualtWindMapRenderTargetTextureFormat);
 }
 
 

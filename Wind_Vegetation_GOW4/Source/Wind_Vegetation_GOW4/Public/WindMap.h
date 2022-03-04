@@ -29,6 +29,9 @@ protected:
 	UPROPERTY(Category = "WindMap", VisibleAnywhere, BlueprintReadOnly)
 	TArray<UTextureRenderTarget2D*> WindMapRenderTarget2Ds;
 	
+	UPROPERTY(Category = "WindMap", VisibleAnywhere, BlueprintReadOnly)
+	int32 WindMapRenderTargetDepth;
+	
 	UPROPERTY(Category = "WindMap", EditAnywhere, BlueprintReadWrite)
 	UMaterialInstanceDynamic* WindMapPostProcessMaterialInstance;
 
@@ -63,7 +66,13 @@ public:
 	virtual void InitializeWindMap_Implementation();
 	
 	UFUNCTION(BlueprintCallable)
-	bool InitializeWithRenderTargetOption(const int32 renderTargetWidth, const int32 renderTargetHeight, const ETextureRenderTargetFormat renderTargetForamt);
+	bool InitializeWithRenderTargetOption
+	(
+		const int32 renderTargetWidth,
+		const int32 renderTargetHeight, 
+		const int32 renderTargetDepth, 
+		const ETextureRenderTargetFormat renderTargetForamt
+	);
 	
 	UFUNCTION(BlueprintPure, BlueprintCallable)
 	bool IsWindMapRenderTarget2DCreated() const;

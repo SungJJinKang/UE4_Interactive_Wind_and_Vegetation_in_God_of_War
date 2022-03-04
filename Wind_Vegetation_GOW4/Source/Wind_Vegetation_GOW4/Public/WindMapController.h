@@ -31,6 +31,9 @@ protected:
 	int32 DefualtWindMapRenderTargetResolutionHeight;
 
 	UPROPERTY(EditDefaultsOnly)
+	int32 DefualtWindMapRenderTargetResolutionDepth;
+
+	UPROPERTY(EditDefaultsOnly)
 	TEnumAsByte<ETextureRenderTargetFormat> DefualtWindMapRenderTargetTextureFormat;
 
 	UPROPERTY(EditDefaultsOnly)
@@ -66,6 +69,7 @@ public:
 	(
 		const int32 renderTargetWidth, 
 		const int32 renderTargetHeight, 
+		const int32 renderTargetDepth, 
 		const ETextureRenderTargetFormat renderTargetForamt
 	);
 

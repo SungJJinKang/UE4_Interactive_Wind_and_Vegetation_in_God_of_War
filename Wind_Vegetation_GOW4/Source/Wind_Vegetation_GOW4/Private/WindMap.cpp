@@ -41,17 +41,23 @@ void UWindMap::InitializeWindMap_Implementation()
 {
 }
 
-bool UWindMap::InitializeWithRenderTargetOption(const int32 renderTargetWidth, const int32 renderTargetHeight, const ETextureRenderTargetFormat renderTargetForamt)
+bool UWindMap::InitializeWithRenderTargetOption
+(
+	const int32 renderTargetWidth, 
+	const int32 renderTargetHeight,
+	const int32 renderTargetDepth,
+	const ETextureRenderTargetFormat renderTargetForamt
+)
 {
 	bool isSuccess = false;
 	
 	ensure(WindMapRenderTarget2Ds.Num() == 0);
-	check(renderTargetWidth > 0 && renderTargetHeight > 0 && (renderTargetWidth & (renderTargetWidth - 1)) == 0 && (renderTargetHeight & (renderTargetHeight - 1)) == 0);
+	check(renderTargetWidth > 0 && renderTargetHeight > 0 && renderTargetDepth > 0 && (renderTargetWidth & (renderTargetWidth - 1)) == 0 && (renderTargetHeight & (renderTargetHeight - 1)) == 0);
 
 	if
 	(
 		WindMapRenderTarget2Ds.Num() == 0 &&
-		renderTargetWidth > 0 && renderTargetHeight > 0 && (renderTargetWidth & (renderTargetWidth - 1)) == 0 && (renderTargetHeight & (renderTargetHeight - 1)) == 0
+		renderTargetWidth > 0 && renderTargetHeight > 0 && renderTargetDepth > 0 && (renderTargetWidth & (renderTargetWidth - 1)) == 0 && (renderTargetHeight & (renderTargetHeight - 1)) == 0
 	)
 	{
 		for(uint32 i = 0 ; i < DefaultRenderTargetCount ; i++)
@@ -62,11 +68,12 @@ bool UWindMap::InitializeWithRenderTargetOption(const int32 renderTargetWidth, c
 			if (IsValid(renderTarget2D))
 			{
 				//renderTarget2D->mipmap
-				renderTarget2D->InitCustomFormat(renderTargetWidth, renderTargetHeight, GetPixelFormatFromRenderTargetFormat(renderTargetForamt), false);
+				renderTarget2D->InitCustomFormat(renderTargetWidth, renderTargetHeight * renderTargetDepth, GetPixelFormatFromRenderTargetFormat(renderTargetForamt), false);
 				WindMapRenderTarget2Ds.Add(renderTarget2D);
 				isSuccess = true;
 			}
 		}
+		WindMapRenderTargetDepth = renderTargetDepth;
 	}
 
 	return isSuccess;

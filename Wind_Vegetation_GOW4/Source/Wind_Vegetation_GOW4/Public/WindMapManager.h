@@ -24,6 +24,7 @@ public:
 		UObject* Outer,
 		const int32 renderTargetWidth, 
 		const int32 renderTargetHeight,
+		const int32 renderTargetDepth,
 		const ETextureRenderTargetFormat renderTargetForamt
 	);
 };

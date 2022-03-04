@@ -9,6 +9,7 @@ UWindMap* UWindMapManager::CreateWindMap
 	UObject* Outer, 
 	const int32 renderTargetWidth, 
 	const int32 renderTargetHeight, 
+	const int32 renderTargetDepth,
 	const ETextureRenderTargetFormat renderTargetForamt
 )
 {
@@ -22,7 +23,7 @@ UWindMap* UWindMapManager::CreateWindMap
 		check(IsValid(createdWindMap));
 		if (IsValid(createdWindMap))
 		{
-			if (createdWindMap->InitializeWithRenderTargetOption(renderTargetWidth, renderTargetHeight, renderTargetForamt) == false)
+			if (createdWindMap->InitializeWithRenderTargetOption(renderTargetWidth, renderTargetHeight, renderTargetDepth, renderTargetForamt) == false)
 			{
 				ensure(false);
 				createdWindMap->MarkPendingKill();
