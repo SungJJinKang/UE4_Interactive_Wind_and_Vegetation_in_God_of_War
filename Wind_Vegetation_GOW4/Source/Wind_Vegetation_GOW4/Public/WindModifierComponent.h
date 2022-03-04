@@ -82,7 +82,10 @@ public:
 	void AddTargetWindMapTo(UWindMap* const windMap);
 
 	UFUNCTION(Category = "WindMap", BlueprintCallable)
-	void RemoveTargetWindMap(const int32 index);
+	void RemoveTargetWindMapByIndex(const int32 index);
+
+	UFUNCTION(Category = "WindMap", BlueprintCallable)
+	void RemoveTargetWindMap(UWindMap* const windMap);
 
 	UFUNCTION(Category = "WindMap", BlueprintCallable)
 	void ClearWindMap();

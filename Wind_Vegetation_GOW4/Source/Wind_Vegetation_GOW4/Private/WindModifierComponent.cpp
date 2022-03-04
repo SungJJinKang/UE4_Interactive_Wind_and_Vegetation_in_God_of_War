@@ -76,12 +76,17 @@ void UWindModifierComponent::AddTargetWindMapTo(UWindMap* const windMap)
 	}
 }
 
-void UWindModifierComponent::RemoveTargetWindMap(const int32 index)
+void UWindModifierComponent::RemoveTargetWindMapByIndex(const int32 index)
 {
 	if(index < TargetWindMaps.Num())
 	{
 		TargetWindMaps.RemoveAt(index);
 	}
+}
+
+void UWindModifierComponent::RemoveTargetWindMap(UWindMap* const windMap)
+{
+	TargetWindMaps.Remove(windMap);
 }
 
 void UWindModifierComponent::ClearWindMap()
