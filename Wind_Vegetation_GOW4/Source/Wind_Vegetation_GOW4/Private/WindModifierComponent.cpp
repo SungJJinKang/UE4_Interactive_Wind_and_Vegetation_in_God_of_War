@@ -101,3 +101,8 @@ void UWindModifierComponent::SetAllCreatedWindMapToTargetWindMaps()
 		AddTargetWindMapTo(*Itr);
 	}
 }
+
+bool UWindModifierComponent::IsWindMapWithInTheRangeOfWindModifier_Implementation(const UWindMap* const windMap) const
+{
+	return true;
+}

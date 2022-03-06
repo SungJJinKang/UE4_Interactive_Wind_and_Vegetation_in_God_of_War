@@ -92,4 +92,8 @@ public:
 
 	UFUNCTION(Category = "WindMap", CallInEditor, BlueprintCallable)
 	void SetAllCreatedWindMapToTargetWindMaps();
+
+	UFUNCTION(BlueprintPure, BlueprintNativeEvent, BlueprintCallable)
+	bool IsWindMapWithInTheRangeOfWindModifier(const UWindMap* const windMap) const;
+	virtual bool IsWindMapWithInTheRangeOfWindModifier_Implementation(const UWindMap* const windMap) const;
 };
