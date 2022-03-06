@@ -86,13 +86,13 @@ bool UWindMap::IsWindMapRenderTarget2DCreated() const
 
 UTextureRenderTarget2D* UWindMap::GetVarianceBufferWindMapRenderTarget2D()
 {
-	const uint32 varianceBufferIndex = GFrameCounter % 3;
+	const uint32 varianceBufferIndex = (GFrameCounter + 1) % 3;
 	return GetWindMapRenderTarget2D(varianceBufferIndex);
 }
 
 UTextureRenderTarget2D* UWindMap::GetBackBufferWindMapRenderTarget2D()
 {
-	const uint32 backBufferIndex = (GFrameCounter + 1) % 3;
+	const uint32 backBufferIndex = (GFrameCounter + 0) % 3;
 	return GetWindMapRenderTarget2D(backBufferIndex);
 }
 
