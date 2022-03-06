@@ -5,6 +5,15 @@ This project implement [Interactive Wind and Vegetation in 'God of War'](https:/
 ## Implemented features
 
 ### Interactive Wind Map ( Using GPU )      
+              
+RenderTargetTexture is used.     
+Convert uv of the renderTargetTexture to location in world space and write wind vector value to texture based on location in world space.         
+               
+There is three render target texture.              
+First one is used by wind maker to write wind vector to render target texture. ( Additive material is used )                     
+Second one is used as target texture of post process shading.                                 
+Thirld one is used for read from vegetation objects. ( Written wind vector is used in vertex shading of vegetation objects ( Tree, Grass.... ) ) ( Double Buffering concept. Texture written by wind maker is read at next frame for performance )                       
+         
 [Test Video 1](https://youtu.be/OVyJW85vM0E)         
 
 ![sdfasdfsaf](https://user-images.githubusercontent.com/33873804/156230627-62c8995b-0788-4e36-b513-bbad49f5cf5d.gif)                
