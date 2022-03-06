@@ -11,7 +11,7 @@ Convert uv of the renderTargetTexture to location in world space and write wind 
                
 There is three render target texture.              
 First one is used by wind maker to write wind vector to render target texture. ( Additive material is used )                     
-Second one is used as target texture of post process shading.                                 
+Second one is used as target texture of post process shading. ( Blur wind map texture, Add static wind vector to wind map )                                  
 Thirld one is used for read from vegetation objects. ( Written wind vector is used in vertex shading of vegetation objects ( Tree, Grass.... ) ) ( Double Buffering concept. Texture written by wind maker is read at next frame for performance )                       
          
 [Test Video 1](https://youtu.be/OVyJW85vM0E)         
