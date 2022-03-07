@@ -93,6 +93,12 @@ public:
 	UFUNCTION(Category = "WindMap", CallInEditor, BlueprintCallable)
 	void SetAllCreatedWindMapToTargetWindMaps();
 
+	/// <summary>
+	/// This is important for performnace.
+	///	Because Draw wind vector to wind map texture isn't cheap operation.
+	///	So it's important to decide if the wind maker affect to wind map. And If it don't, Wind maker shader will not run.
+	///
+	/// </summary>
 	UFUNCTION(BlueprintPure, BlueprintNativeEvent, BlueprintCallable)
 	bool IsWindMapWithInTheRangeOfWindModifier(const UWindMap* const windMap) const;
 	virtual bool IsWindMapWithInTheRangeOfWindModifier_Implementation(const UWindMap* const windMap) const;
