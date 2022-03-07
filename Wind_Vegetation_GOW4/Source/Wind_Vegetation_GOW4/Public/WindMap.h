@@ -58,6 +58,12 @@ public:
 	UPROPERTY(Category = "WindMap", EditAnywhere, BlueprintReadWrite)
 	FVector SpeedToStaticWindVector;
 
+	UPROPERTY(Category = "WindMap", EditAnywhere, BlueprintReadWrite)
+	FVector MinWindVector;
+
+	UPROPERTY(Category = "WindMap", EditAnywhere, BlueprintReadWrite)
+	FVector MaxWindVector;
+
 	UWindMap();
 	virtual void BeginDestroy() override;
 
