@@ -106,6 +106,7 @@ UTextureRenderTarget2D* UWindMap::GetWindMapRenderTarget2D(const int32 index)
 {
 	UTextureRenderTarget2D* renderTarget = nullptr;
 
+	ensure(index < WindMapRenderTarget2Ds.Num());
 	if(index < WindMapRenderTarget2Ds.Num())
 	{
 		if(IsValid(WindMapRenderTarget2Ds[index]))
