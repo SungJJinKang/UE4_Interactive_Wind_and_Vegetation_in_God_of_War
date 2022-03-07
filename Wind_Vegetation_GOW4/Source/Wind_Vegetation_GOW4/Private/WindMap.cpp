@@ -157,5 +157,5 @@ void UWindMap::TickWindMap()
 
 void UWindMap::PostTickWindMap_Implementation()
 {
-	//UKismetRenderingLibrary::ClearRenderTarget2D(GetWorld(), GetVarianceBufferWindMapRenderTarget2D(), FLinearColor::Transparent);
+	PreviousTickWindMapOriginWorldPosition = WindMapOriginWorldPosition;
 }

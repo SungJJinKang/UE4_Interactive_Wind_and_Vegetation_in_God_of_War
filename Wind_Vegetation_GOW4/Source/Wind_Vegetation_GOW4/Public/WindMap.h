@@ -32,8 +32,11 @@ protected:
 	UPROPERTY(Category = "WindMap", VisibleAnywhere, BlueprintReadOnly)
 	int32 WindMapRenderTargetDepth;
 	
-	UPROPERTY(Category = "WindMap", EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = "WindMap", VisibleAnywhere, BlueprintReadWrite)
 	UMaterialInstanceDynamic* WindMapPostProcessMaterialInstance;
+
+	UPROPERTY(Category = "WindMap", VisibleAnywhere, BlueprintReadOnly)
+	FVector PreviousTickWindMapOriginWorldPosition;
 
 	UFUNCTION()
 	void ApplyPostProcessToBackBuffer();
