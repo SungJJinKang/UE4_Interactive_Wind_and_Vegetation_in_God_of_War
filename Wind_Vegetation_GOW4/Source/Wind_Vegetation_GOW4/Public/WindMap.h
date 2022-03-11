@@ -38,6 +38,9 @@ protected:
 	UPROPERTY(Category = "WindMap", VisibleAnywhere, BlueprintReadOnly)
 	FVector PreviousTickWindMapOriginWorldPosition;
 
+	UPROPERTY(Category = "WindMap", VisibleAnywhere, BlueprintReadOnly)
+	FVector2D RenderTargetResolution;
+
 	UFUNCTION()
 	void ApplyPostProcessToBackBuffer();
 

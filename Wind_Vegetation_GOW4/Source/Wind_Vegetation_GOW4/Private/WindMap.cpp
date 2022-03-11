@@ -73,6 +73,7 @@ bool UWindMap::InitializeWithRenderTargetOption
 				isSuccess = true;
 			}
 		}
+		RenderTargetResolution = FVector2D(renderTargetWidth, renderTargetHeight * renderTargetDepth);
 		WindMapRenderTargetDepth = renderTargetDepth;
 	}
 
